@@ -5,7 +5,7 @@
   "type": "module",
   "description": "Sitio web B2B de Maxguantes para Netlify y Supabase",
   "scripts": {
-    "build": "node scripts/build.mjs",
+    "build": "node --env-file-if-exists=.env scripts/build.mjs",
     "check": "node scripts/check.mjs"
   },
   "engines": {

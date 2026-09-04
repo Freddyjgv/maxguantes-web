@@ -27,7 +27,7 @@
 
   let quote = safeParse(localStorage.getItem(storageKey), []).filter(item =>
     item && typeof item.code === "string" && typeof item.name === "string"
-  );
+  ).map(item => ({ ...item, quantity: Math.max(1, Number.parseInt(item.quantity, 10) || 1) }));
 
   function persistQuote() {
     localStorage.setItem(storageKey, JSON.stringify(quote));
@@ -55,7 +55,7 @@
     });
 
     if (quoteProductsInput) {
-      quoteProductsInput.value = quote.map(item => `${item.code} — ${item.name}`).join("\n");
+      quoteProductsInput.value = quote.map(item => `${item.code} — ${item.name} — Cantidad: ${item.quantity}`).join("\n");
     }
 
     if (!quoteItems) return;
@@ -80,6 +80,21 @@
       const info = makeElement("div");
       info.append(makeElement("small", "", item.code));
       info.append(makeElement("strong", "", item.name));
+      const quantityLabel = makeElement("label", "quote-quantity");
+      quantityLabel.append(makeElement("span", "", "Cantidad"));
+      const quantity = document.createElement("input");
+      quantity.type = "number";
+      quantity.min = "1";
+      quantity.value = String(item.quantity);
+      quantity.setAttribute("aria-label", `Cantidad de ${item.name}`);
+      quantity.addEventListener("change", () => {
+        item.quantity = Math.max(1, Number.parseInt(quantity.value, 10) || 1);
+        quantity.value = String(item.quantity);
+        persistQuote();
+        if (quoteProductsInput) quoteProductsInput.value = quote.map(product => `${product.code} — ${product.name} — Cantidad: ${product.quantity}`).join("\n");
+      });
+      quantityLabel.append(quantity);
+      info.append(quantityLabel);
 
       const remove = makeElement("button", "remove-item", "×");
       remove.type = "button";
@@ -118,7 +133,8 @@
       const item = {
         code: button.dataset.code || "Referencia",
         name: button.dataset.name || "Producto",
-        image: button.dataset.image || ""
+        image: button.dataset.image || "",
+        quantity: 1
       };
       if (!quote.some(product => product.code === item.code)) {
         quote.push(item);
@@ -133,9 +149,56 @@
     });
   });
 
+  const certificationTooltips = [...document.querySelectorAll(".cert-tooltip")];
+  const closeCertificationTooltips = (except = null) => {
+    certificationTooltips.forEach(tooltip => {
+      if (tooltip === except) return;
+      tooltip.classList.remove("is-open");
+      tooltip.querySelector(".cert-pill")?.setAttribute("aria-expanded", "false");
+    });
+  };
+  certificationTooltips.forEach(tooltip => {
+    const trigger = tooltip.querySelector(".cert-pill");
+    trigger?.addEventListener("click", event => {
+      if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+      event.stopPropagation();
+      const willOpen = !tooltip.classList.contains("is-open");
+      closeCertificationTooltips(tooltip);
+      tooltip.classList.toggle("is-open", willOpen);
+      trigger.setAttribute("aria-expanded", String(willOpen));
+    });
+  });
+  document.addEventListener("click", () => closeCertificationTooltips());
+
+  document.querySelector("[data-quote-whatsapp]")?.addEventListener("click", () => {
+    const form = document.querySelector("[data-quote-form]");
+    if (!quote.length) {
+      notify("Agregue al menos un producto a la solicitud");
+      return;
+    }
+    if (!form?.reportValidity()) return;
+    const data = new FormData(form);
+    const lines = [
+      "*SOLICITUD DE COTIZACIÓN - MAXGUANTES*",
+      `*Cliente:* ${data.get("nombre") || ""}`,
+      `*Empresa:* ${data.get("empresa") || ""}`,
+      `*Teléfono:* ${data.get("telefono") || ""}`,
+      `*Email:* ${data.get("email") || ""}`,
+      "------------------------------------------",
+      ...quote.flatMap((item, index) => [`*${index + 1}. ${item.code} — ${item.name}*`, `   Cantidad: ${item.quantity}`, ""]),
+      "------------------------------------------",
+      data.get("mensaje") ? `*Información adicional:* ${data.get("mensaje")}` : "",
+      "_Enviado desde maxguantes.com_"
+    ].filter(Boolean);
+    const whatsappUrl = `https://wa.me/50764335738?text=${encodeURIComponent(lines.join("\n"))}`;
+    track("quote_whatsapp", { items: quote.length });
+    window.open(whatsappUrl, "_blank", "noopener");
+  });
+
   document.addEventListener("keydown", event => {
     if (event.key === "Escape") {
       closeQuote();
+      closeCertificationTooltips();
       nav?.classList.remove("open");
       menuToggle?.setAttribute("aria-expanded", "false");
     }
@@ -175,8 +238,9 @@
     const term = (search?.value || "").toLowerCase().trim();
     let visible = 0;
     cards.forEach(card => {
-      const matchesCategory = activeFilter === "all" || card.dataset.category === activeFilter;
-      const searchable = `${card.dataset.name || ""} ${card.dataset.sku || ""} ${card.dataset.brand || ""}`;
+      const productCategories = (card.dataset.categories || "").split(/\s+/).filter(Boolean);
+      const matchesCategory = activeFilter === "all" || productCategories.includes(activeFilter);
+      const searchable = `${card.dataset.name || ""} ${card.dataset.sku || ""} ${card.dataset.brand || ""} ${card.dataset.certifications || ""}`;
       const matchesTerm = !term || searchable.includes(term);
       const show = matchesCategory && matchesTerm;
       card.hidden = !show;

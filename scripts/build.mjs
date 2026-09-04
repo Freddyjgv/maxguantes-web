@@ -37,27 +37,38 @@ function slugify(value) {
 function list(value) {
   if (Array.isArray(value)) return value.filter(Boolean).map(String);
   if (!value) return [];
-  return String(value).split(/\r?\n|;|\s*\|\s*/).map(item => item.trim()).filter(Boolean);
+  return String(value).split(/\r?\n|;|,|\s*\|\s*/).map(item => item.trim()).filter(Boolean);
 }
 
-function categoryFor(type) {
-  const value = slugify(type);
-  const rules = [
-    [/guante|mano/, "proteccion-de-manos"],
-    [/ignifug|arco|ropa-fr|vestuario-fr/, "ropa-ignifuga"],
-    [/respir|mascar|filtro|cartucho/, "proteccion-respiratoria"],
-    [/altura|caida|arnes|linea-de-vida/, "trabajo-en-altura"],
-    [/cabeza|casco|visual|facial|lente|gafa|visor/, "proteccion-cabeza-visual-facial"],
-    [/calzado|bota|zapato/, "calzado-de-seguridad"],
-    [/audit|orejera|tapon/, "proteccion-auditiva"]
-  ];
-  return rules.find(([pattern]) => pattern.test(value))?.[1] || "proteccion-corporal";
+function categoriesFor(product) {
+  const type = slugify(product.tipo || "");
+  const text = slugify([product.tipo, product.nombre, product.codigo].filter(Boolean).join(" "));
+  const matches = [];
+  const add = category => { if (!matches.includes(category)) matches.push(category); };
+
+  // Primero se reconoce la forma del EPP y después los riesgos secundarios.
+  if (/proteccion-manual/.test(type) || /guante|proteccion-de-manos/.test(text)) add("proteccion-de-manos");
+  if (/retardante-al-fuego/.test(type) || /ignifug|arco-electrico|ropa-fr|vestuario-fr/.test(text)) add("ropa-ignifuga");
+  if (/proteccion-respiratoria/.test(type) || /respir|mascar|filtro|cartucho/.test(text)) add("proteccion-respiratoria");
+  if (/proteccion-altura/.test(type) || /altura|caida|arnes|linea-de-vida/.test(text)) add("trabajo-en-altura");
+  if (/proteccion-para-la-cabeza|proteccion-visual/.test(type) || /cabeza|casco|visual|facial|lente|gafa|visor/.test(text)) add("proteccion-cabeza-visual-facial");
+  if (/calzado/.test(type) || /calzado|bota|zapato/.test(text)) add("calzado-de-seguridad");
+  if (/proteccion-auditiva/.test(type) || /audit|orejera|tapon/.test(text)) add("proteccion-auditiva");
+
+  return matches.length ? matches : ["proteccion-corporal"];
 }
 
 function normalizeProduct(product, index) {
   if (!product.codigo && product.slug && product.sku && product.name) {
+    const existingCategories = [...new Set([...list(product.categories), product.category].filter(Boolean))];
+    const inferredCategories = categoriesFor({ tipo: product.categoryName || product.category, nombre: product.name, codigo: product.sku });
+    const assignedCategories = [...new Set([...existingCategories, ...inferredCategories])];
+    const primaryCategory = assignedCategories[0] || "proteccion-corporal";
     return {
       ...product,
+      category: primaryCategory,
+      categories: assignedCategories,
+      categoryName: categories.find(item => item.slug === primaryCategory)?.shortName || product.categoryName || "Protección industrial",
       standards: list(product.standards),
       features: list(product.features),
       materials: list(product.materials),
@@ -68,7 +79,8 @@ function normalizeProduct(product, index) {
   const sku = String(product.codigo || product.id || `MG-${index + 1}`).trim();
   const name = String(product.nombre || `Producto ${sku}`).trim();
   const brand = String(product.marca || "Maxguantes").trim();
-  const category = categoryFor(product.tipo);
+  const assignedCategories = categoriesFor(product);
+  const category = assignedCategories[0];
   const categoryName = categories.find(item => item.slug === category)?.shortName || "Protección industrial";
   const standards = list(product.certificaciones);
   const sheet = String(product.ficha_tecnica || "").trim();
@@ -80,6 +92,7 @@ function normalizeProduct(product, index) {
     shortName: name,
     brand,
     category,
+    categories: assignedCategories,
     categoryName,
     summary: `${name} ${brand ? `de ${brand}` : ""} para aplicaciones de protección industrial. Disponibilidad y precio sujetos a confirmación.`,
     description: `Solicite la validación técnica de ${name} según la tarea, el riesgo, las cantidades y las condiciones de uso de su empresa. Maxguantes confirma la referencia, documentación, precio y disponibilidad antes de cada pedido.`,
@@ -209,7 +222,7 @@ for (const product of products) {
 }
 
 for (const category of categories) {
-  await addPage(`/categorias/${category.slug}/`, `categorias/${category.slug}/index.html`, renderCategory(category, products), products.some(product => product.category === category.slug));
+  await addPage(`/categorias/${category.slug}/`, `categorias/${category.slug}/index.html`, renderCategory(category, products), products.some(product => product.categories?.includes(category.slug)));
 }
 
 for (const resource of resources) {
