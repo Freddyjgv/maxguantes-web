@@ -148,8 +148,8 @@ function layout({title, description, path, active, content, schemas = [], bodyCl
   <meta property="og:url" content="${canonical}">
   <meta name="twitter:card" content="summary">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="preload" href="/assets/styles.css?v=20260904-2" as="style">
-  <link rel="stylesheet" href="/assets/styles.css?v=20260904-2">
+  <link rel="preload" href="/assets/styles.css?v=20260904-3" as="style">
+  <link rel="stylesheet" href="/assets/styles.css?v=20260904-3">
   <script defer src="/assets/site.js"></script>
   ${ga4 ? `<script async src="https://www.googletagmanager.com/gtag/js?id=${esc(ga4)}"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${esc(ga4)}',{anonymize_ip:true});</script>` : ""}
   ${allSchemas.map(schema => `<script type="application/ld+json">${json(schema)}</script>`).join("\n  ")}
@@ -178,7 +178,7 @@ function categoryCards() {
 }
 
 function partnerBand() {
-  return `<section class="partner-band" aria-label="Marcas con las que trabajamos"><div class="container partner-inner"><p>Solo trabajamos con las mejores marcas.</p><div class="partner-logos">${brands.map(b=>`<img src="${b.image}" width="300" height="300" loading="lazy" alt="${esc(b.name)}">`).join("")}</div></div></section>`;
+  return `<div class="partner-band" aria-label="Marcas con las que trabajamos"><div class="container partner-inner"><p>Solo trabajamos con las mejores marcas.</p><div class="partner-logos">${brands.map(b=>`<img src="${b.image}" width="300" height="300" loading="lazy" alt="${esc(b.name)}">`).join("")}</div></div></div>`;
 }
 
 function productCard(product) {
@@ -200,8 +200,8 @@ export function renderHome(products) {
       <img class="hero-bg" src="/assets/hero-industrial.webp" width="1800" height="1200" fetchpriority="high" alt="Profesional industrial con equipo de protección personal">
       <div class="hero-grid" aria-hidden="true"></div>
       <div class="container hero-content"><div class="hero-copy">${eyebrow("Seguridad industrial B2B · Panamá", true)}<h1 class="display">Protección certificada.<br><span>Respuesta inmediata.</span></h1><p class="hero-lead">Equipos de protección personal para operaciones exigentes. Especialistas en ropa ignífuga, arco eléctrico, guantes técnicos y dotaciones industriales.</p><div class="button-row"><a class="btn btn-primary" href="/productos/">Explorar productos →</a><button class="btn btn-outline" type="button" data-open-quote>Solicitar cotización</button></div></div></div>
+      ${partnerBand()}
     </section>
-    ${partnerBand()}
     <section class="section"><div class="container"><div class="section-head"><div>${eyebrow("Encuentre lo correcto más rápido")}<h2 class="section-title">Protección organizada<br>por necesidad.</h2><p class="section-intro">Navegue por categoría, riesgo o aplicación. Cada ficha está diseñada para facilitar la revisión técnica y la solicitud de cotización.</p></div><a class="text-link" href="/productos/">Ver catálogo completo</a></div>${categoryCards()}</div></section>
     <section class="risk-band"><div class="container risk-layout"><div class="risk-copy">${eyebrow("Asesoría para reducir errores", true)}<h2 class="section-title">Busque por riesgo.<br>No solo por producto.</h2><p>Traducimos su operación, matriz de riesgos o especificación técnica en una selección compatible y documentada para revisión de su responsable de seguridad.</p><a class="btn btn-primary" href="/soluciones/">Conocer soluciones</a></div><div class="risk-list">${["Arco eléctrico","Fuego y calor","Corte y abrasión","Riesgo químico","Caídas de altura","Gases y partículas"].map((r,i)=>`<a class="risk-item" href="/soluciones/#riesgo-${i+1}"><span>0${i+1}</span><b>${r}</b><em>→</em></a>`).join("")}</div></div></section>
     <section class="section"><div class="container"><div class="section-head"><div>${eyebrow("Selección técnica")}<h2 class="section-title">Productos destacados.</h2><p class="section-intro">Referencias de muestra mientras incorporamos el catálogo completo desde Supabase.</p></div><a class="text-link" href="/productos/">Ver productos</a></div>${featured.length ? `<div class="product-grid">${featured.map(productCard).join("")}</div>` : emptyCatalog()}</div></section>
