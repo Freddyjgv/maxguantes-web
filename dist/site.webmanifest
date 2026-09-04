@@ -1,0 +1,10 @@
+{
+  "name": "Maxguantes",
+  "short_name": "Maxguantes",
+  "description": "Equipos de protección personal certificados para empresas, proyectos y operaciones industriales en Panamá y Latinoamérica.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b0d0f",
+  "theme_color": "#df1f2d",
+  "icons": []
+}

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 700" role="img" aria-labelledby="title desc">
+  <title id="title">Producto Maxguantes</title>
+  <desc id="desc">Imagen pendiente de producto de protección personal</desc>
+  <rect width="700" height="700" fill="#f0f1f2"/>
+  <path d="M214 175h272v350H214z" fill="#fff" stroke="#c6c9cc" stroke-width="8"/>
+  <path d="M257 407l72-82 53 56 42-43 62 69v68H214v-22z" fill="#dfe2e4"/>
+  <circle cx="283" cy="267" r="30" fill="#df1f2d"/>
+  <text x="350" y="570" text-anchor="middle" font-family="Arial, sans-serif" font-size="25" fill="#363b3f">Imagen en actualización</text>
+</svg>

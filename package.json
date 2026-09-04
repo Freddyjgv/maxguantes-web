@@ -1,0 +1,14 @@
+{
+  "name": "maxguantes-website",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Sitio web B2B de Maxguantes para Netlify y Supabase",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/check.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
