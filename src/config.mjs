@@ -22,6 +22,7 @@ export const categories = [
   {
     slug: "ropa-ignifuga",
     code: "FR",
+    image: "/assets/categories/ropa-ignifuga.webp",
     name: "Ropa ignífuga y arco eléctrico",
     shortName: "Ropa ignífuga",
     description: "Prendas técnicas para operaciones expuestas a calor, llama, arco eléctrico, electricidad estática y riesgos combinados.",
@@ -31,6 +32,7 @@ export const categories = [
   {
     slug: "proteccion-de-manos",
     code: "A5",
+    image: "/assets/categories/proteccion-manos.webp",
     name: "Guantes de protección",
     shortName: "Protección de manos",
     description: "Guantes anticorte, dieléctricos, químicos, térmicos y de propósito general seleccionados según la tarea y el nivel de exposición.",
@@ -40,6 +42,7 @@ export const categories = [
   {
     slug: "proteccion-respiratoria",
     code: "P3",
+    image: "/assets/categories/proteccion-respiratoria.webp",
     name: "Protección respiratoria",
     shortName: "Protección respiratoria",
     description: "Respiradores, filtros, cartuchos y accesorios para programas de protección frente a partículas, gases y vapores.",
@@ -49,6 +52,7 @@ export const categories = [
   {
     slug: "trabajo-en-altura",
     code: "H",
+    image: "/assets/categories/trabajo-altura.webp",
     name: "Protección contra caídas",
     shortName: "Trabajo en altura",
     description: "Arneses, líneas de vida, eslingas, conectores y sistemas para trabajos en altura sujetos a validación técnica.",
@@ -58,6 +62,7 @@ export const categories = [
   {
     slug: "proteccion-cabeza-visual-facial",
     code: "E",
+    image: "/assets/categories/cabeza-rostro-visual.webp",
     name: "Cabeza, rostro y protección visual",
     shortName: "Cabeza y rostro",
     description: "Cascos, lentes, visores y accesorios para proteger frente a impacto, proyección de partículas, salpicaduras y radiación.",
@@ -67,6 +72,7 @@ export const categories = [
   {
     slug: "calzado-de-seguridad",
     code: "S3",
+    image: "/assets/categories/calzado-seguridad.webp",
     name: "Calzado de seguridad",
     shortName: "Calzado de seguridad",
     description: "Botas y zapatos industriales seleccionados según protección mecánica, eléctrica, química y condiciones del terreno.",
@@ -76,6 +82,7 @@ export const categories = [
   {
     slug: "proteccion-auditiva",
     code: "dB",
+    image: "/assets/categories/proteccion-auditiva.webp",
     name: "Protección auditiva",
     shortName: "Protección auditiva",
     description: "Tapones y orejeras para programas de conservación auditiva y diferentes niveles de exposición ocupacional al ruido.",
@@ -85,6 +92,7 @@ export const categories = [
   {
     slug: "proteccion-corporal",
     code: "PPE",
+    image: "/assets/categories/proteccion-corporal.webp",
     name: "Protección corporal y complementaria",
     shortName: "Protección corporal",
     description: "Soluciones para protección química, soldadura, alta visibilidad, lluvia y otras condiciones especiales de operación.",

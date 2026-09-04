@@ -174,7 +174,7 @@ function pageHero({eyebrowText, title, intro, breadcrumb = []}) {
 }
 
 function categoryCards() {
-  return `<div class="category-grid">${categories.map((c, index) => `<a class="category-card" href="/categorias/${c.slug}/"><span class="category-index">${String(index + 1).padStart(2,"0")} / ${c.code}</span><span class="category-symbol">${c.code}</span><div><h3>${c.name}</h3><p>${c.description}</p><span class="card-link">Explorar categoría →</span></div></a>`).join("")}</div>`;
+  return `<div class="category-grid">${categories.map(c => `<a class="category-card" href="/categorias/${c.slug}/"><div class="category-image"><img src="${c.image}" width="960" height="640" loading="lazy" alt="${esc(c.name)}"></div><div class="category-content"><h3>${c.name}</h3><p>${c.description}</p><span class="card-link">Explorar categoría →</span></div></a>`).join("")}</div>`;
 }
 
 function productCard(product) {
