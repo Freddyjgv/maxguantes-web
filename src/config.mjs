@@ -110,7 +110,14 @@ export const industries = [
   {name:"Marítimo y logística", description:"Soluciones para puertos, transporte, almacenes, patios y operaciones offshore."}
 ];
 
-export const brands = ["Portwest", "3M", "Ansell", "Steelpro", "Weldas", "Surtek", "General Electric"];
+export const brands = [
+  { name: "Portwest", image: "/assets/brands/portwest.png" },
+  { name: "3M", image: "/assets/brands/3m.png" },
+  { name: "General Electric", image: "/assets/brands/general-electric.png" },
+  { name: "Steelpro", image: "/assets/brands/steelpro.png" },
+  { name: "Ansell", image: "/assets/brands/ansell.png" },
+  { name: "Best Value", image: "/assets/brands/best-value.png" }
+];
 
 export const resources = [
   {
