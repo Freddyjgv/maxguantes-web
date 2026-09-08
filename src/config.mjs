@@ -22,7 +22,7 @@ export const categories = [
   {
     slug: "ropa-ignifuga",
     code: "FR",
-    image: "https://www.maxguantes.com/wp-content/uploads/2025/10/FR21.jpeg",
+    image: "/assets/categories/catalog/ropa-ignifuga.webp",
     name: "Ropa ignífuga y arco eléctrico",
     shortName: "Ropa ignífuga",
     description: "Prendas técnicas para operaciones expuestas a calor, llama, arco eléctrico, electricidad estática y riesgos combinados.",
@@ -32,7 +32,7 @@ export const categories = [
   {
     slug: "proteccion-de-manos",
     code: "A5",
-    image: "https://www.maxguantes.com/wp-content/uploads/2025/11/GG242.jpg",
+    image: "/assets/categories/catalog/proteccion-manos.webp",
     name: "Guantes de protección",
     shortName: "Protección de manos",
     description: "Guantes anticorte, dieléctricos, químicos, térmicos y de propósito general seleccionados según la tarea y el nivel de exposición.",
@@ -42,7 +42,7 @@ export const categories = [
   {
     slug: "proteccion-respiratoria",
     code: "P3",
-    image: "https://tgghrbbjxdvklptqzwmi.supabase.co/storage/v1/object/public/productos/1774368085658_3M_6200_respirador_medio_rostro.png",
+    image: "/assets/categories/catalog/proteccion-respiratoria.webp",
     name: "Protección respiratoria",
     shortName: "Protección respiratoria",
     description: "Respiradores, filtros, cartuchos y accesorios para programas de protección frente a partículas, gases y vapores.",
@@ -52,7 +52,7 @@ export const categories = [
   {
     slug: "trabajo-en-altura",
     code: "H",
-    image: "https://tgghrbbjxdvklptqzwmi.supabase.co/storage/v1/object/public/productos/1774364009496_H11050_arnes_best_value.jpg",
+    image: "/assets/categories/catalog/trabajo-altura.webp",
     name: "Protección contra caídas",
     shortName: "Trabajo en altura",
     description: "Arneses, líneas de vida, eslingas, conectores y sistemas para trabajos en altura sujetos a validación técnica.",
@@ -62,7 +62,7 @@ export const categories = [
   {
     slug: "proteccion-cabeza-visual-facial",
     code: "E",
-    image: "https://tgghrbbjxdvklptqzwmi.supabase.co/storage/v1/object/public/productos/1774365884100_GH327_GE.webp",
+    image: "/assets/categories/catalog/cabeza-rostro-visual.webp",
     name: "Cabeza, rostro y protección visual",
     shortName: "Cabeza y rostro",
     description: "Cascos, lentes, visores y accesorios para proteger frente a impacto, proyección de partículas, salpicaduras y radiación.",
@@ -72,7 +72,7 @@ export const categories = [
   {
     slug: "calzado-de-seguridad",
     code: "S3",
-    image: "https://tgghrbbjxdvklptqzwmi.supabase.co/storage/v1/object/public/productos/1774364252211_Nazca_NU317.webp",
+    image: "/assets/categories/catalog/calzado-seguridad.webp",
     name: "Calzado de seguridad",
     shortName: "Calzado de seguridad",
     description: "Botas y zapatos industriales seleccionados según protección mecánica, eléctrica, química y condiciones del terreno.",
@@ -82,7 +82,7 @@ export const categories = [
   {
     slug: "proteccion-auditiva",
     code: "dB",
-    image: "https://tgghrbbjxdvklptqzwmi.supabase.co/storage/v1/object/public/productos/1778689999894_GM452_GE_Protector.webp",
+    image: "/assets/categories/catalog/proteccion-auditiva.webp",
     name: "Protección auditiva",
     shortName: "Protección auditiva",
     description: "Tapones y orejeras para programas de conservación auditiva y diferentes niveles de exposición ocupacional al ruido.",
@@ -111,12 +111,12 @@ export const industries = [
 ];
 
 export const brands = [
-  { name: "Portwest", image: "/assets/brands/portwest.png" },
-  { name: "3M", image: "/assets/brands/3m.png" },
-  { name: "General Electric", image: "/assets/brands/general-electric.png" },
-  { name: "Steelpro", image: "/assets/brands/steelpro.png" },
-  { name: "Ansell", image: "/assets/brands/ansell.png" },
-  { name: "Best Value", image: "/assets/brands/best-value.png" }
+  { name: "Portwest", image: "/assets/brands/portwest.webp" },
+  { name: "3M", image: "/assets/brands/3m.webp" },
+  { name: "General Electric", image: "/assets/brands/general-electric.webp" },
+  { name: "Steelpro", image: "/assets/brands/steelpro.webp" },
+  { name: "Ansell", image: "/assets/brands/ansell.webp" },
+  { name: "Best Value", image: "/assets/brands/best-value.webp" }
 ];
 
 export const resources = [

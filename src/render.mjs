@@ -148,8 +148,9 @@ function layout({title, description, path, active, content, schemas = [], bodyCl
   <meta property="og:url" content="${canonical}">
   <meta name="twitter:card" content="summary">
   <link rel="icon" href="/assets/favicon-32x32.png" type="image/png" sizes="32x32">
-  <link rel="preload" href="/assets/styles.css?v=20260908-5" as="style">
-  <link rel="stylesheet" href="/assets/styles.css?v=20260908-5">
+  <link rel="preload" href="/assets/hero-industrial.webp" as="image" type="image/webp" fetchpriority="high">
+  <link rel="preload" href="/assets/styles.css?v=20260908-6" as="style">
+  <link rel="stylesheet" href="/assets/styles.css?v=20260908-6">
   <script defer src="/assets/site.js?v=20260904-5"></script>
   ${ga4 ? `<script async src="https://www.googletagmanager.com/gtag/js?id=${esc(ga4)}"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${esc(ga4)}',{anonymize_ip:true});</script>` : ""}
   ${allSchemas.map(schema => `<script type="application/ld+json">${json(schema)}</script>`).join("\n  ")}
@@ -194,16 +195,16 @@ function generalProtectionBanner() {
 }
 
 function partnerBand() {
-  return `<div class="partner-band" aria-label="Marcas con las que trabajamos"><div class="container partner-inner"><p>Solo trabajamos con las mejores marcas.</p><div class="partner-logos">${brands.map(b=>`<img src="${b.image}" width="300" height="300" loading="lazy" alt="${esc(b.name)}">`).join("")}</div></div></div>`;
+  return `<div class="partner-band" aria-label="Marcas con las que trabajamos"><div class="container partner-inner"><p>Solo trabajamos con las mejores marcas.</p><div class="partner-logos">${brands.map(b=>`<img src="${b.image}" width="140" height="140" loading="lazy" alt="${esc(b.name)}">`).join("")}</div></div></div>`;
 }
 
 function electricalProtectionSection() {
   const solutions = [
-    { number: "01", title: "Ropa FR, AR y antiestática", text: "Overoles, camisas, pantalones y capas de protección.", href: "/categorias/ropa-ignifuga/", image: "/assets/fr50.webp", alt: "Overol de protección ignífuga y antiestática", kind: "product" },
-    { number: "02", title: "Guantes para riesgo eléctrico", text: "Opciones dieléctricas y contra arco según la aplicación.", href: "/categorias/proteccion-de-manos/", image: "/assets/a780.webp", alt: "Guante técnico con protección frente a arco eléctrico", kind: "product" },
-    { number: "03", title: "Protección facial", text: "Pantallas y visores para rostro, cuello y cabeza.", href: "/categorias/proteccion-cabeza-visual-facial/", image: "https://www.maxguantes.com/wp-content/uploads/2025/10/FR18.jpg", alt: "Balaclava FR18 de Portwest", kind: "product" },
-    { number: "04", title: "Cascos dieléctricos", text: "Protección de cabeza según clase y norma requerida.", href: "/categorias/proteccion-cabeza-visual-facial/", image: "https://tgghrbbjxdvklptqzwmi.supabase.co/storage/v1/object/public/productos/1774365884100_GH327_GE.webp", alt: "Casco dieléctrico GH327 de General Electric", kind: "product" },
-    { number: "05", title: "Arneses para riesgo eléctrico", text: "Opciones dieléctricas o sin componentes conductivos.", href: "/categorias/trabajo-en-altura/", image: "https://tgghrbbjxdvklptqzwmi.supabase.co/storage/v1/object/public/productos/1774364208445_Arnes_Maxipro_Dielectrico.jpg", alt: "Arnés dieléctrico Maxipro de Climax", kind: "product" }
+    { number: "01", title: "Ropa FR, AR y antiestática", text: "Overoles, camisas, pantalones y capas de protección.", href: "/categorias/ropa-ignifuga/", image: "/assets/products/fr50-card.webp", alt: "Overol de protección ignífuga y antiestática", kind: "product" },
+    { number: "02", title: "Guantes para riesgo eléctrico", text: "Opciones dieléctricas y contra arco según la aplicación.", href: "/categorias/proteccion-de-manos/", image: "/assets/products/a780-card.webp", alt: "Guante técnico con protección frente a arco eléctrico", kind: "product" },
+    { number: "03", title: "Protección facial", text: "Pantallas y visores para rostro, cuello y cabeza.", href: "/categorias/proteccion-cabeza-visual-facial/", image: "/assets/products/fr18-card.webp", alt: "Balaclava FR18 de Portwest", kind: "product" },
+    { number: "04", title: "Cascos dieléctricos", text: "Protección de cabeza según clase y norma requerida.", href: "/categorias/proteccion-cabeza-visual-facial/", image: "/assets/products/gh327-card.webp", alt: "Casco dieléctrico GH327 de General Electric", kind: "product" },
+    { number: "05", title: "Arneses para riesgo eléctrico", text: "Opciones dieléctricas o sin componentes conductivos.", href: "/categorias/trabajo-en-altura/", image: "/assets/products/maxipro-card.webp", alt: "Arnés dieléctrico Maxipro de Climax", kind: "product" }
   ];
 
   return `<aside class="portwest-authorized" aria-label="Maxguantes, distribuidor autorizado Portwest">
@@ -242,10 +243,10 @@ function electricalProtectionSection() {
           </div>
           <figure class="electrical-worker-panel">
             <span>Protección integral</span>
-            <img src="/assets/electrical-worker-white-v2.webp" width="700" height="1518" loading="lazy" alt="Trabajador equipado con ropa de protección ignífuga, casco y guantes">
+            <picture><source media="(max-width: 640px)" srcset="/assets/electrical-worker-mobile.webp" width="420" height="910"><img src="/assets/electrical-worker-white-v2.webp" width="700" height="1518" loading="lazy" alt="Trabajador equipado con ropa de protección ignífuga, casco y guantes"></picture>
             <figcaption>FR / AR / ESD</figcaption>
           </figure>
-          ${solutions.map((item, index) => `<a class="electrical-tile electrical-tile-${index + 1}" href="${item.href}"><div class="electrical-tile-copy"><span>${item.number}</span><h3>${item.title}</h3><p>${item.text}</p><b aria-hidden="true">→</b></div><div class="electrical-tile-image electrical-tile-image-${item.kind.replace(" ", " electrical-tile-image-")}"><img src="${item.image}" width="640" height="420" loading="lazy" alt="${item.alt}"></div></a>`).join("")}
+          ${solutions.map((item, index) => `<a class="electrical-tile electrical-tile-${index + 1}" href="${item.href}"><div class="electrical-tile-copy"><span>${item.number}</span><h3>${item.title}</h3><p>${item.text}</p><b aria-hidden="true">→</b></div><div class="electrical-tile-image electrical-tile-image-${item.kind.replace(" ", " electrical-tile-image-")}"><img src="${item.image}" width="520" height="520" loading="lazy" alt="${item.alt}"></div></a>`).join("")}
         </div>
       </div>
   </section>`;
