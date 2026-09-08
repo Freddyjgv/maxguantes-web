@@ -1,4 +1,4 @@
-import { site, categories, industries, brands, resources } from "./config.mjs";
+import { site, categories, brands, resources } from "./config.mjs";
 
 const esc = (value = "") => String(value)
   .replaceAll("&", "&amp;")
@@ -13,7 +13,6 @@ const json = (value) => JSON.stringify(value).replaceAll("<", "\\u003c");
 const navItems = [
   ["/", "Inicio", "home"],
   ["/productos/", "Productos", "products"],
-  ["/soluciones/", "Soluciones", "solutions"],
   ["/sectores/", "Industrias", "industries"],
   ["/nosotros/", "Nosotros", "about"],
   ["/recursos/", "Recursos", "resources"],
@@ -149,8 +148,8 @@ function layout({title, description, path, active, content, schemas = [], bodyCl
   <meta property="og:url" content="${canonical}">
   <meta name="twitter:card" content="summary">
   <link rel="icon" href="/assets/favicon-32x32.png" type="image/png" sizes="32x32">
-  <link rel="preload" href="/assets/styles.css?v=20260904-6" as="style">
-  <link rel="stylesheet" href="/assets/styles.css?v=20260904-6">
+  <link rel="preload" href="/assets/styles.css?v=20260908-3" as="style">
+  <link rel="stylesheet" href="/assets/styles.css?v=20260908-3">
   <script defer src="/assets/site.js?v=20260904-5"></script>
   ${ga4 ? `<script async src="https://www.googletagmanager.com/gtag/js?id=${esc(ga4)}"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${esc(ga4)}',{anonymize_ip:true});</script>` : ""}
   ${allSchemas.map(schema => `<script type="application/ld+json">${json(schema)}</script>`).join("\n  ")}
@@ -178,8 +177,78 @@ function categoryCards() {
   return `<div class="category-grid">${categories.map(c => `<a class="category-card" href="/categorias/${c.slug}/"><div class="category-image"><img src="${c.image}" width="92" height="92" loading="lazy" alt="${esc(c.name)}"></div><div class="category-content"><h3>${c.name}</h3><p>${c.description}</p><span class="card-link">Explorar categoría →</span></div></a>`).join("")}</div>`;
 }
 
+function generalProtectionBanner() {
+  return `<section class="epp-range-banner" aria-labelledby="epp-range-title">
+    <div class="epp-range-media">
+      <img src="/assets/epp-general-worker.webp" width="1672" height="941" loading="lazy" alt="Trabajador industrial equipado con casco, lentes, guantes, chaleco reflectivo y calzado de seguridad">
+    </div>
+    <div class="container epp-range-inner">
+      <div class="epp-range-copy">
+        <span>Equipo de protección personal</span>
+        <h2 id="epp-range-title">Protección para cada tarea.<br><em>Soluciones para cada riesgo.</em></h2>
+        <p>Guantes, cascos, lentes, respiración, protección auditiva, calzado, altura y dotaciones complementarias para las exigencias reales de cada operación.</p>
+        <a class="btn btn-primary" href="/productos/">Explorar catálogo completo <b aria-hidden="true">→</b></a>
+      </div>
+    </div>
+  </section>`;
+}
+
 function partnerBand() {
   return `<div class="partner-band" aria-label="Marcas con las que trabajamos"><div class="container partner-inner"><p>Solo trabajamos con las mejores marcas.</p><div class="partner-logos">${brands.map(b=>`<img src="${b.image}" width="300" height="300" loading="lazy" alt="${esc(b.name)}">`).join("")}</div></div></div>`;
+}
+
+function electricalProtectionSection() {
+  const solutions = [
+    { number: "01", title: "Ropa FR, AR y antiestática", text: "Overoles, camisas, pantalones y capas de protección.", href: "/categorias/ropa-ignifuga/", image: "/assets/fr50.webp", alt: "Overol de protección ignífuga y antiestática", kind: "product" },
+    { number: "02", title: "Guantes para riesgo eléctrico", text: "Opciones dieléctricas y contra arco según la aplicación.", href: "/categorias/proteccion-de-manos/", image: "/assets/a780.webp", alt: "Guante técnico con protección frente a arco eléctrico", kind: "product" },
+    { number: "03", title: "Protección facial", text: "Pantallas y visores para rostro, cuello y cabeza.", href: "/categorias/proteccion-cabeza-visual-facial/", image: "https://www.maxguantes.com/wp-content/uploads/2025/10/FR18.jpg", alt: "Balaclava FR18 de Portwest", kind: "product" },
+    { number: "04", title: "Cascos dieléctricos", text: "Protección de cabeza según clase y norma requerida.", href: "/categorias/proteccion-cabeza-visual-facial/", image: "https://tgghrbbjxdvklptqzwmi.supabase.co/storage/v1/object/public/productos/1774365884100_GH327_GE.webp", alt: "Casco dieléctrico GH327 de General Electric", kind: "product" },
+    { number: "05", title: "Arneses para riesgo eléctrico", text: "Opciones dieléctricas o sin componentes conductivos.", href: "/categorias/trabajo-en-altura/", image: "https://tgghrbbjxdvklptqzwmi.supabase.co/storage/v1/object/public/productos/1774364208445_Arnes_Maxipro_Dielectrico.jpg", alt: "Arnés dieléctrico Maxipro de Climax", kind: "product" }
+  ];
+
+  return `<aside class="portwest-authorized" aria-label="Maxguantes, distribuidor autorizado Portwest">
+      <div class="portwest-authorized-media" aria-hidden="true">
+        <img src="/assets/portwest-fr-campaign.webp" width="800" height="538" loading="lazy" alt="">
+      </div>
+      <div class="container portwest-authorized-inner">
+        <div class="portwest-authorized-copy">
+          <img class="portwest-authorized-logo" src="/assets/brands/portwest-reverse.svg" width="429" height="107" loading="lazy" alt="Portwest">
+          <span>Distribuidor autorizado.</span>
+          <h3>Protección ignífuga certificada</h3>
+          <p>Desde 1904, Portwest desarrolla ropa de trabajo y EPP para operaciones exigentes, con especialización en prendas resistentes a la llama y presencia en más de 130 países. Maxguantes acerca su catálogo, documentación técnica y atención comercial a empresas y proyectos.</p>
+          <a class="btn portwest-authorized-cta" href="/productos/">Ver productos Portwest <b aria-hidden="true">→</b></a>
+        </div>
+      </div>
+      <div class="container portwest-authorized-standards" aria-label="Normas técnicas de referencia">
+        <p>Normas según referencia</p>
+        <div class="portwest-standard-list">
+          <span title="ASTM F1506 — materiales textiles para exposición a arco eléctrico">ASTM F1506</span>
+          <span title="NFPA 2112 — prendas resistentes a la llama para riesgos térmicos industriales">NFPA 2112</span>
+          <span title="NFPA 70E — seguridad eléctrica en lugares de trabajo">NFPA 70E</span>
+          <span title="ANSI/ISEA Z89.1 — protección industrial de cabeza">ANSI Z89.1</span>
+          <span title="IEC 61482 — ropa contra los peligros térmicos de un arco eléctrico">IEC 61482</span>
+        </div>
+        <small>La conformidad se valida en la ficha vigente de cada producto.</small>
+      </div>
+    </aside>
+    <section class="electrical-protection" aria-labelledby="electrical-protection-title">
+      <div class="container">
+        <div class="electrical-grid">
+          <div class="electrical-intro">
+            ${eyebrow("Protección eléctrica especializada")}
+            <h2 class="section-title" id="electrical-protection-title">Dotación integral para<br>trabajos con riesgo eléctrico.</h2>
+            <p>Protección corporal y EPP complementario seleccionados según el riesgo, la energía incidente y la norma aplicable.</p>
+            <a class="btn btn-primary" href="/categorias/ropa-ignifuga/">Ver protección especializada →</a>
+          </div>
+          <figure class="electrical-worker-panel">
+            <span>Protección integral</span>
+            <img src="/assets/electrical-worker-white-v2.webp" width="700" height="1518" loading="lazy" alt="Trabajador equipado con ropa de protección ignífuga, casco y guantes">
+            <figcaption>FR / AR / ESD</figcaption>
+          </figure>
+          ${solutions.map((item, index) => `<a class="electrical-tile electrical-tile-${index + 1}" href="${item.href}"><div class="electrical-tile-copy"><span>${item.number}</span><h3>${item.title}</h3><p>${item.text}</p><b aria-hidden="true">→</b></div><div class="electrical-tile-image electrical-tile-image-${item.kind.replace(" ", " electrical-tile-image-")}"><img src="${item.image}" width="640" height="420" loading="lazy" alt="${item.alt}"></div></a>`).join("")}
+        </div>
+      </div>
+  </section>`;
 }
 
 function productCard(product) {
@@ -205,8 +274,9 @@ export function renderHome(products) {
       <div class="container hero-content"><div class="hero-copy">${eyebrow("Seguridad industrial B2B · Panamá", true)}<h1 class="display">Protección certificada.<br><span>Respuesta inmediata.</span></h1><p class="hero-lead">Equipos de protección personal para operaciones exigentes. Especialistas en ropa ignífuga, arco eléctrico, guantes técnicos y dotaciones industriales.</p><div class="button-row"><a class="btn btn-primary" href="/productos/">Explorar productos →</a><button class="btn btn-outline" type="button" data-open-quote>Solicitar cotización</button></div></div></div>
       ${partnerBand()}
     </section>
-    <section class="section"><div class="container"><div class="section-head"><div>${eyebrow("Encuentre lo correcto más rápido")}<h2 class="section-title">Protección organizada<br>por necesidad.</h2><p class="section-intro">Navegue por categoría, riesgo o aplicación. Cada ficha está diseñada para facilitar la revisión técnica y la solicitud de cotización.</p></div><a class="text-link" href="/productos/">Ver catálogo completo</a></div>${categoryCards()}</div></section>
-    <section class="risk-band"><div class="container risk-layout"><div class="risk-copy">${eyebrow("Asesoría para reducir errores", true)}<h2 class="section-title">Busque por riesgo.<br>No solo por producto.</h2><p>Traducimos su operación, matriz de riesgos o especificación técnica en una selección compatible y documentada para revisión de su responsable de seguridad.</p><a class="btn btn-primary" href="/soluciones/">Conocer soluciones</a></div><div class="risk-list">${["Arco eléctrico","Fuego y calor","Corte y abrasión","Riesgo químico","Caídas de altura","Gases y partículas"].map((r,i)=>`<a class="risk-item" href="/soluciones/#riesgo-${i+1}"><span>0${i+1}</span><b>${r}</b><em>→</em></a>`).join("")}</div></div></section>
+    ${electricalProtectionSection()}
+    ${generalProtectionBanner()}
+    <section class="category-section" aria-label="Categorías de equipos de protección personal"><div class="container">${categoryCards()}</div></section>
     <section class="section"><div class="container"><div class="section-head"><div>${eyebrow("Selección técnica")}<h2 class="section-title">Productos destacados.</h2><p class="section-intro">Referencias de muestra mientras incorporamos el catálogo completo desde Supabase.</p></div><a class="text-link" href="/productos/">Ver productos</a></div>${featured.length ? `<div class="product-grid">${featured.map(productCard).join("")}</div>` : emptyCatalog()}</div></section>
     <section class="section process"><div class="container">${eyebrow("Un proceso pensado para compras B2B")}<h2 class="section-title">De la necesidad a la<br>cotización, sin fricción.</h2><div class="steps"><article class="step"><span>01</span><h3>Comparta el requerimiento</h3><p>Busque referencias o envíenos su lista, cantidades, tallas y fecha requerida.</p></article><article class="step"><span>02</span><h3>Validamos la información</h3><p>Revisamos aplicación, normas, alternativas y disponibilidad con usted.</p></article><article class="step"><span>03</span><h3>Reciba la propuesta</h3><p>Preparamos la cotización según las condiciones comerciales de su empresa.</p></article></div></div></section>
     <section class="section story-preview"><div class="container split-layout"><div class="image-frame"><img src="/assets/about-team.webp" width="1800" height="1200" loading="lazy" alt="Equipo técnico revisando una selección de equipos de protección personal"></div><div class="split-copy">${eyebrow("Empresa panameña")}<h2 class="section-title">Una década resolviendo necesidades de protección.</h2><p>Maxguantes nació en Panamá en 2015 para atender empresas que necesitan más que una lista de productos: respuesta, documentación y acompañamiento en la selección.</p><div class="metric-row"><div><strong>2015</strong><span>Año de fundación</span></div><div><strong>B2B</strong><span>Atención especializada</span></div><div><strong>LATAM</strong><span>Alcance comercial</span></div></div><a class="text-link" href="/nosotros/">Conozca nuestra historia</a></div></div></section>
@@ -239,29 +309,64 @@ export function renderCategory(category, products) {
 }
 
 export function renderAbout() {
-  const content = `${pageHero({eyebrowText:"Nuestra empresa",title:"Seguridad industrial con criterio técnico y respuesta comercial.",intro:"Empresa panameña fundada en 2015 para ayudar a organizaciones y proyectos a identificar, cotizar y adquirir equipos de protección personal.",breadcrumb:[{name:"Nosotros"}]})}
-    <section class="section"><div class="container split-layout"><div class="image-frame"><img src="/assets/about-team.webp" width="1800" height="1200" fetchpriority="high" alt="Equipo de Maxguantes revisando especificaciones de protección personal"></div><div class="split-copy">${eyebrow("Desde 2015")}<h2 class="section-title">Nuestra historia.</h2><p>Maxguantes nació en Ciudad de Panamá con una idea concreta: responder con rapidez sin sacrificar la calidad de la información técnica. Con el tiempo ampliamos nuestra oferta desde protección de manos hacia ropa ignífuga, arco eléctrico, calzado, respiración, altura y dotaciones integrales.</p><p>Atendemos empresas, contratistas y proyectos que necesitan referencias identificables, documentación del fabricante y una comunicación clara durante su proceso de compra.</p></div></div></section>
-    <section class="values section"><div class="container"><div class="section-head"><div>${eyebrow("Cómo trabajamos")}<h2 class="section-title">Principios que se ven<br>en cada cotización.</h2></div></div><div class="value-grid"><article><span>01</span><h3>Claridad técnica</h3><p>Identificamos producto, norma, variante y documentación para reducir ambigüedades.</p></article><article><span>02</span><h3>Respuesta responsable</h3><p>Confirmamos precios, disponibilidad y plazos antes de asumir compromisos.</p></article><article><span>03</span><h3>Atención directa</h3><p>Mantenemos comunicación con compras, operaciones y seguridad durante el proceso.</p></article><article><span>04</span><h3>Catálogo abierto</h3><p>Localizamos alternativas y productos especiales fuera de las referencias publicadas.</p></article></div></div></section>
-    <section class="section"><div class="container"><div class="metric-banner"><div><strong>2015</strong><span>Fundación en Panamá</span></div><div><strong>Empresas</strong><span>Enfoque comercial B2B</span></div><div><strong>EPP</strong><span>Especialización industrial</span></div><div><strong>Exportación</strong><span>Atención internacional</span></div></div></div></section>`;
-  return layout({title:"Acerca de Maxguantes | Proveedor de EPP en Panamá",description:"Conozca la historia de Maxguantes, empresa panameña fundada en 2015 y especializada en equipos de protección personal para industrias y proyectos.",path:"/nosotros/",active:"about",content,schemas:[breadcrumbSchema([{name:"Inicio",path:"/"},{name:"Nosotros",path:"/nosotros/"}])]});
-}
-
-export function renderSolutions() {
-  const risks = [
-    ["riesgo-1","Arco eléctrico","Ropa, guantes y accesorios cuya selección debe alinearse con el estudio de energía incidente y las normas aplicables.","IEC 61482 · ASTM F1506 · NFPA 70E"],
-    ["riesgo-2","Fuego y calor","Prendas y equipos para exposición a llama, calor convectivo, radiante o de contacto según la tarea.","EN ISO 11612 · EN ISO 14116"],
-    ["riesgo-3","Corte y abrasión","Guantes seleccionados por nivel de corte, abrasión, destreza, agarre y condiciones de uso.","ANSI/ISEA 105 · EN 388"],
-    ["riesgo-4","Riesgo químico","Protección de manos, cuerpo, rostro y respiración compatible con la sustancia, concentración y tiempo de exposición.","EN ISO 374 · información del químico"],
-    ["riesgo-5","Caídas de altura","Arneses, conectores, eslingas y líneas de vida que deben integrarse al sistema y plan de rescate.","ANSI Z359 · EN 361 · EN 355"],
-    ["riesgo-6","Gases y partículas","Selección de respiradores y filtros basada en contaminante, concentración, ajuste y programa respiratorio.","NIOSH 42 CFR 84 · EN 143 · EN 14387"]
+  const sectors = [
+    ["01", "Petroterminales", "EPP para almacenamiento, despacho, mantenimiento y operaciones con combustibles."],
+    ["02", "Generación y distribución de energía", "Protección para tareas eléctricas, mantenimiento de redes, plantas y servicios técnicos."],
+    ["03", "Transporte de combustible", "Dotaciones para conductores, operadores, patios, carga y descarga de productos."],
+    ["04", "Navieras y operaciones marítimas", "Equipos para puertos, embarcaciones, terminales y actividades expuestas a intemperie."],
+    ["05", "Construcción e infraestructura", "Protección para obra civil, montaje, soldadura, trabajo en altura y uso de herramientas."],
+    ["06", "Contratistas industriales", "Suministro para cuadrillas de mantenimiento, proyectos, paradas de planta y servicios especializados."]
   ];
-  const content = `${pageHero({eyebrowText:"Soluciones por riesgo",title:"La referencia correcta empieza por entender la exposición.",intro:"Organizamos el catálogo para que compras y seguridad puedan partir del riesgo, revisar criterios y solicitar una alternativa documentada.",breadcrumb:[{name:"Soluciones"}]})}<section class="section"><div class="container"><div class="solution-grid">${risks.map((r,i)=>`<article id="${r[0]}" class="solution-card"><span>0${i+1}</span><h2>${r[1]}</h2><p>${r[2]}</p><small>Criterios frecuentes: ${r[3]}</small><button class="text-link button-link" type="button" data-open-quote>Consultar solución</button></article>`).join("")}</div><div class="technical-note"><strong>Importante</strong><p>La información del sitio ayuda a identificar opciones, pero no sustituye la evaluación de riesgos, el programa de seguridad ni la aprobación del responsable competente de su empresa.</p></div></div></section>`;
-  return layout({title:"Soluciones de EPP por riesgo industrial | Maxguantes",description:"Encuentre equipos de protección para arco eléctrico, calor, corte, químicos, alturas, gases y partículas con asesoría en Panamá.",path:"/soluciones/",active:"solutions",content,schemas:[breadcrumbSchema([{name:"Inicio",path:"/"},{name:"Soluciones",path:"/soluciones/"}])],keywords:"EPP por riesgo, arco eléctrico, protección química, trabajo en altura"});
+  const risks = [
+    ["Arco eléctrico", "Energía incidente, contacto eléctrico y riesgos térmicos asociados.", "/categorias/ropa-ignifuga/"],
+    ["Fuego y calor", "Llama, calor convectivo, radiante y de contacto.", "/categorias/ropa-ignifuga/"],
+    ["Electricidad estática", "Prendas y dotaciones para operaciones que requieren control electrostático.", "/categorias/ropa-ignifuga/"],
+    ["Corte, abrasión e impacto", "Protección de manos según tarea, agarre, destreza y nivel de exposición.", "/categorias/proteccion-de-manos/"],
+    ["Sustancias químicas", "Compatibilidad de manos, cuerpo, rostro y respiración con el agente presente.", "/categorias/proteccion-corporal/"],
+    ["Caídas de altura", "Arneses, eslingas, conectores y sistemas sujetos a validación técnica.", "/categorias/trabajo-en-altura/"],
+    ["Gases, vapores y partículas", "Respiradores, filtros y cartuchos seleccionados para el contaminante.", "/categorias/proteccion-respiratoria/"],
+    ["Cabeza, visión y audición", "Cascos, lentes, visores y protección auditiva para la exposición ocupacional.", "/categorias/proteccion-cabeza-visual-facial/"]
+  ];
+  const aboutSchema = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "@id": `${site.domain}/nosotros/#aboutpage`,
+    url: `${site.domain}/nosotros/`,
+    name: "Maxguantes: proveedor de equipos de protección personal en Panamá",
+    description: "Empresa panameña de suministro y asesoría de EPP para petroterminales, energía, transporte de combustible, navieras, construcción y contratistas.",
+    inLanguage: "es-PA",
+    mainEntity: {
+      "@id": `${site.domain}/#organization`,
+      "@type": ["Organization", "LocalBusiness"],
+      name: site.name,
+      foundingDate: site.founded,
+      areaServed: ["Panamá", "Latinoamérica"],
+      knowsAbout: ["Equipos de protección personal", "Ropa ignífuga", "Protección contra arco eléctrico", "Protección de manos", "Protección respiratoria", "Trabajo en altura", "Seguridad industrial"]
+    }
+  };
+  const content = `${pageHero({eyebrowText:"Proveedor de EPP en Panamá",title:"Protección industrial para operaciones que no pueden detenerse.",intro:"Desde 2015 ayudamos a empresas, contratistas y proyectos a identificar, cotizar y adquirir equipos de protección personal con información clara, atención directa y respuesta comercial.",breadcrumb:[{name:"Nosotros"}]})}
+    <section class="section about-intro"><div class="container split-layout"><div class="image-frame about-team-image"><img src="/assets/about-team.webp" width="1800" height="1200" fetchpriority="high" alt="Equipo técnico de Maxguantes revisando equipos de protección personal y especificaciones para un cliente industrial"></div><div class="split-copy">${eyebrow("Quiénes somos")}<h2 class="section-title">Criterio técnico.<br>Respuesta comercial.</h2><p>Maxguantes es una empresa panameña especializada en el suministro de equipos de protección personal para operaciones industriales. Nacimos para resolver una necesidad concreta: responder con rapidez sin sacrificar la identificación de la referencia, la norma, la documentación ni las condiciones reales de uso.</p><p>Trabajamos estrechamente con departamentos de compras, seguridad, operaciones y mantenimiento. Nuestro objetivo no es entregar una lista genérica, sino facilitar una selección trazable y una cotización alineada con el riesgo, la cantidad, la fecha requerida y las condiciones comerciales de cada empresa.</p><div class="about-trust-row"><div><strong>2015</strong><span>Fundación en Panamá</span></div><div><strong>B2B</strong><span>Atención especializada</span></div><div><strong>LATAM</strong><span>Alcance comercial</span></div></div></div></div></section>
+    <section class="about-sectors" aria-labelledby="about-sectors-title"><img class="about-sectors-bg" src="/assets/about-industries.webp" width="1672" height="941" loading="lazy" alt="Equipo industrial inspeccionando una petroterminal con tanques, tuberías e infraestructura energética"><div class="about-sectors-shade"></div><div class="container about-sectors-content">${eyebrow("Industrias que atendemos",true)}<h2 class="section-title" id="about-sectors-title">Experiencia junto a<br>operaciones críticas.</h2><p class="about-sectors-lead">Nuestros clientes incluyen algunas de las principales petroterminales y empresas de generación y distribución de energía del país, además de sus contratistas, transportistas de combustible, navieras y constructoras.</p><div class="about-sector-grid">${sectors.map(item=>`<article><span>${item[0]}</span><h3>${item[1]}</h3><p>${item[2]}</p></article>`).join("")}</div><a class="btn btn-primary" href="/sectores/">Conocer las industrias que atendemos →</a></div></section>
+    <section class="section about-risks" aria-labelledby="about-risks-title"><div class="container"><div class="section-head"><div>${eyebrow("Protección según la exposición")}<h2 class="section-title" id="about-risks-title">Riesgos diferentes requieren<br>respuestas diferentes.</h2><p class="section-intro">Organizamos nuestra oferta para que cada conversación comience por la tarea y el peligro, no únicamente por el nombre del producto.</p></div><a class="text-link" href="/productos/">Explorar productos por categoría</a></div><div class="about-risk-grid">${risks.map((item,index)=>`<a href="${item[2]}"><span>${String(index+1).padStart(2,"0")}</span><h3>${item[0]}</h3><p>${item[1]}</p><b aria-hidden="true">→</b></a>`).join("")}</div></div></section>
+    <section class="about-purpose"><div class="container about-purpose-layout"><div class="about-purpose-copy">${eyebrow("Nuestros objetivos")}<h2 class="section-title">Servicio excepcional con responsabilidad.</h2><p>Queremos que cada cliente encuentre la solución adecuada para sus necesidades. Por eso mantenemos un equipo dispuesto a revisar referencias, riesgos, especificaciones y alternativas, acompañando la solicitud desde la consulta inicial hasta la entrega.</p><p>También asumimos el crecimiento con un criterio responsable y sostenible. Buscamos reducir impactos innecesarios en nuestra operación y priorizamos relaciones con fabricantes y proveedores que compartan principios éticos, sociales y de cumplimiento.</p><div class="button-row"><a class="btn btn-primary" href="/contacto/">Hablar con nuestro equipo →</a><a class="btn btn-light-outline" href="/productos/">Explorar productos</a></div></div><div class="about-principles"><article><span>01</span><h3>Claridad técnica</h3><p>Identificamos referencia, norma, variante y documentación para reducir ambigüedades.</p></article><article><span>02</span><h3>Respuesta responsable</h3><p>Confirmamos precios, disponibilidad y plazos antes de asumir compromisos.</p></article><article><span>03</span><h3>Atención directa</h3><p>Mantenemos comunicación con compras, operaciones y seguridad durante el proceso.</p></article><article><span>04</span><h3>Abastecimiento flexible</h3><p>Combinamos referencias publicadas, catálogos especiales y productos bajo pedido.</p></article></div></div></section>`;
+  return layout({title:"Maxguantes | Proveedor de EPP y seguridad industrial en Panamá",description:"Proveedor panameño de EPP para petroterminales, energía, combustibles, navieras, construcción y contratistas. Asesoría y cotización B2B.",path:"/nosotros/",active:"about",content,schemas:[aboutSchema,breadcrumbSchema([{name:"Inicio",path:"/"},{name:"Nosotros",path:"/nosotros/"}])],bodyClass:"about-page",keywords:"proveedor de EPP en Panamá, equipos de protección personal Panamá, seguridad industrial, ropa ignífuga, arco eléctrico, petroterminales"});
 }
 
 export function renderIndustries() {
-  const content = `${pageHero({eyebrowText:"Industrias",title:"Protección adaptada al trabajo que realmente se ejecuta.",intro:"Cada sector combina riesgos, condiciones ambientales, normas internas y frecuencias de reposición diferentes. Partimos de esa realidad para preparar la propuesta.",breadcrumb:[{name:"Industrias"}]})}<section class="section"><div class="container"><div class="industry-grid">${industries.map((industry,i)=>`<article><span>0${i+1}</span><h2>${industry.name}</h2><p>${industry.description}</p><button class="text-link button-link" type="button" data-open-quote>Consultar dotación</button></article>`).join("")}</div></div></section><section class="section process"><div class="container split-text"><div>${eyebrow("Información útil")}<h2 class="section-title">Para cotizar mejor,<br>necesitamos contexto.</h2></div><div class="prose"><p>Una requisición completa reduce consultas y mejora la comparación entre ofertas. Incluya, cuando sea posible:</p><ul class="check-list"><li>Tarea y riesgo principal</li><li>Norma o especificación exigida</li><li>Marca y SKU si ya están definidos</li><li>Tallas, cantidades y frecuencia</li><li>Fecha y lugar de entrega</li><li>Ficha, fotografía o documento de referencia</li></ul></div></div></section>`;
-  return layout({title:"EPP para industria, minería, energía y construcción | Maxguantes",description:"Equipos de protección personal para energía, minería, petróleo y gas, construcción, manufactura, sector marítimo y logística.",path:"/sectores/",active:"industries",content,schemas:[breadcrumbSchema([{name:"Inicio",path:"/"},{name:"Industrias",path:"/sectores/"}])]});
+  const sectors = [
+    {number:"01",name:"Energía y utilities",copy:"Desde generación y subestaciones hasta cuadrillas de distribución, los trabajos eléctricos exigen compatibilidad entre la energía incidente, la tarea y la dotación. Apoyamos la selección de prendas FR/AR, protección de manos y equipos complementarios para mantenimiento, maniobras, inspecciones y atención de fallas.",risks:["Arco eléctrico","Electricidad estática","Trabajo en altura"],products:"Overoles y camisas FR/AR, guantes dieléctricos y contra arco eléctrico, cascos clase E, pantallas faciales y arneses dieléctricos."},
+    {number:"02",name:"Petroterminales, petróleo y combustibles",copy:"Las operaciones de almacenamiento, transferencia, carga, descarga y mantenimiento combinan exposición a hidrocarburos, inflamabilidad, ambientes exteriores y tránsito operativo. Estructuramos dotaciones para personal de patio, operadores, mantenimiento y contratistas, incluyendo requerimientos de prendas ignífugas y control electrostático.",risks:["Llama y calor","Hidrocarburos","Atmósferas peligrosas"],products:"Ropa ignífuga y antiestática, guantes resistentes a químicos, lentes de seguridad, protección respiratoria y calzado de seguridad."},
+    {number:"03",name:"Construcción e infraestructura",copy:"Obras civiles, montaje electromecánico, soldadura y actividades en altura demandan EPP práctico, durable y coherente con el frente de trabajo. Atendemos proyectos y contratistas que requieren consolidar tallas, categorías y documentación dentro de una misma requisición.",risks:["Caídas de altura","Impacto y proyección","Corte y abrasión"],products:"Arneses y eslingas, cascos, lentes, guantes anticorte, botas de seguridad, chalecos y protección para soldadura."},
+    {number:"04",name:"Marítimo, puertos y logística",copy:"En muelles, patios, embarcaciones y centros de distribución confluyen manipulación de carga, movimiento de equipos, lluvia, superficies resbalosas y exposición prolongada a la intemperie. La dotación debe equilibrar visibilidad, agarre, protección mecánica y movilidad durante toda la jornada.",risks:["Manipulación de carga","Intemperie","Ruido industrial"],products:"Guantes de agarre y anticorte, botas impermeables o de seguridad, chalecos de alta visibilidad, protección auditiva y lentes antiempañantes."},
+    {number:"05",name:"Minería, metales y talleres",copy:"Procesos de corte, esmerilado, soldadura, fundición y mantenimiento de equipos pesados generan riesgos de partículas, calor, chispas, ruido y bordes filosos. Ayudamos a comparar referencias técnicas para cada estación de trabajo, sin sustituir la evaluación de riesgos del cliente.",risks:["Chispas y metal caliente","Partículas","Ruido"],products:"Guantes para soldadura y anticorte, caretas de soldar, lentes y visores, ropa resistente a la llama, respiradores y orejeras."},
+    {number:"06",name:"Manufactura y mantenimiento industrial",copy:"Plantas de producción, líneas de empaque y equipos rotativos requieren una protección que acompañe tareas repetitivas, precisión manual y programas internos de seguridad. Trabajamos con compras y supervisión para consolidar referencias de consumo frecuente y necesidades específicas de mantenimiento.",risks:["Corte y atrapamiento","Partículas","Gases y polvo"],products:"Guantes de protección mecánica, respiradores y filtros, protección visual, auditiva, calzado y prendas de trabajo especializadas."}
+  ];
+  const industrySchema = {"@context":"https://schema.org","@type":"CollectionPage","@id":`${site.domain}/sectores/#industries`,name:"Industrias atendidas por Maxguantes",url:`${site.domain}/sectores/`,description:"EPP y dotaciones industriales para energía, petroterminales, combustibles, construcción, sector marítimo, minería y manufactura en Panamá.",about:sectors.map(item=>({"@type":"Thing",name:item.name})),provider:{"@id":`${site.domain}/#organization`}};
+  const content = `<section class="industries-hero"><img class="industries-hero-bg" src="/assets/industries-hero.webp" width="1672" height="941" fetchpriority="high" alt="Profesionales con equipos de protección personal frente a una terminal industrial, puerto e infraestructura energética"><div class="industries-hero-overlay"></div><div class="container industries-hero-content"><nav class="breadcrumb industries-breadcrumb" aria-label="Migas de pan"><a href="/">Inicio</a><span>/</span><span aria-current="page">Industrias</span></nav>${eyebrow("EPP para operaciones industriales",true)}<h1>Protección para el trabajo que mantiene a Panamá en movimiento.</h1><p>Dotaciones y equipos de protección personal para energía, petroterminales, combustibles, construcción, puertos, manufactura y sus contratistas.</p><button class="btn btn-primary" type="button" data-open-quote>Solicitar asesoría para su industria →</button></div></section>
+    <section class="section industries-intro"><div class="container split-text"><div>${eyebrow("Una operación, muchos factores")}<h2 class="section-title">La industria define el contexto.<br>La tarea define la protección.</h2></div><div class="prose"><p>Cada operación combina peligros, clima, movilidad, normas internas y ciclos de reposición distintos. Por eso partimos de su frente de trabajo, la exposición y la especificación técnica para ordenar opciones que compras, seguridad y operaciones puedan revisar con mayor claridad.</p><p>Precio, disponibilidad, variantes, tallas y documentación se confirman antes de preparar la propuesta comercial.</p></div></div></section>
+    <section class="industries-detail" aria-labelledby="industries-detail-title"><div class="container"><div class="section-head"><div>${eyebrow("Sectores que atendemos")}<h2 class="section-title" id="industries-detail-title">Equipos seleccionados para<br>la realidad de cada industria.</h2><p class="section-intro">Estas son aplicaciones frecuentes. La selección final siempre debe validarse frente a la evaluación de riesgos, las normas vigentes y los procedimientos del cliente.</p></div></div><div class="industry-detail-grid">${sectors.map(item=>`<article class="industry-detail-card"><span class="industry-number">${item.number}</span><h2>${item.name}</h2><p>${item.copy}</p><div class="industry-risk-tags">${item.risks.map(risk=>`<span>${risk}</span>`).join("")}</div><div class="industry-products"><strong>Ejemplos de equipos</strong><p>${item.products}</p></div></article>`).join("")}</div></div></section>
+    <section class="section process"><div class="container split-text"><div>${eyebrow("Información útil")}<h2 class="section-title">Para cotizar mejor,<br>necesitamos contexto.</h2></div><div class="prose"><p>Una requisición completa reduce consultas y mejora la comparación entre ofertas. Incluya, cuando sea posible:</p><ul class="check-list"><li>Tarea y riesgo principal</li><li>Norma o especificación exigida</li><li>Marca y SKU si ya están definidos</li><li>Tallas, cantidades y frecuencia</li><li>Fecha y lugar de entrega</li><li>Ficha, fotografía o documento de referencia</li></ul></div></div></section>`;
+  return layout({title:"EPP para energía, petroterminales, construcción y más | Maxguantes",description:"Equipos de protección personal y dotaciones industriales en Panamá para energía, petroterminales, combustibles, construcción, puertos, minería y manufactura.",path:"/sectores/",active:"industries",content,schemas:[industrySchema,breadcrumbSchema([{name:"Inicio",path:"/"},{name:"Industrias",path:"/sectores/"}])],keywords:"EPP energía Panamá, EPP petroterminales, dotaciones industriales, EPP construcción, protección marítima, seguridad industrial Panamá"});
 }
 
 export function renderServices() {
@@ -274,7 +379,7 @@ export function renderServices() {
     ["Ventas internacionales","Atendemos solicitudes de exportación y coordinamos condiciones logísticas según destino y alcance."]
   ];
   const content = `${pageHero({eyebrowText:"Servicios",title:"Abastecimiento de EPP con atención técnica y comercial.",intro:"Apoyamos desde la identificación de una referencia hasta la preparación de dotaciones, personalización y suministro para proyectos.",breadcrumb:[{name:"Servicios"}]})}<section class="section"><div class="container"><div class="service-grid">${services.map((s,i)=>`<article><span>${String(i+1).padStart(2,"0")}</span><h2>${s[0]}</h2><p>${s[1]}</p></article>`).join("")}</div></div></section><section class="risk-band"><div class="container split-text dark-split"><div>${eyebrow("Bordado ignífugo",true)}<h2 class="section-title">Personalizar sin ignorar el desempeño.</h2></div><div><p>En prendas de protección, el método, el hilo y la ubicación de la personalización importan. Revisamos el requerimiento antes de confirmar el servicio.</p><button class="btn btn-primary" type="button" data-open-quote>Consultar personalización</button></div></div></section>`;
-  return layout({title:"Servicios de suministro y personalización de EPP | Maxguantes",description:"Cotización de EPP, dotaciones industriales, productos bajo pedido, documentación técnica, personalización y ventas internacionales.",path:"/servicios/",active:"solutions",content,schemas:[breadcrumbSchema([{name:"Inicio",path:"/"},{name:"Servicios",path:"/servicios/"}])]});
+  return layout({title:"Servicios de suministro y personalización de EPP | Maxguantes",description:"Cotización de EPP, dotaciones industriales, productos bajo pedido, documentación técnica, personalización y ventas internacionales.",path:"/servicios/",active:"services",content,schemas:[breadcrumbSchema([{name:"Inicio",path:"/"},{name:"Servicios",path:"/servicios/"}])]});
 }
 
 export function renderExport() {

@@ -49,6 +49,16 @@
   status = 301
 
 [[redirects]]
+  from = "/soluciones"
+  to = "/sectores/"
+  status = 301
+
+[[redirects]]
+  from = "/soluciones/*"
+  to = "/sectores/"
+  status = 301
+
+[[redirects]]
   from = "/blog"
   to = "/recursos/"
   status = 301

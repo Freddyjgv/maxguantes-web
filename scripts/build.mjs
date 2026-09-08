@@ -6,7 +6,6 @@ import {
   renderProduct,
   renderCategory,
   renderAbout,
-  renderSolutions,
   renderIndustries,
   renderServices,
   renderExport,
@@ -208,7 +207,6 @@ const addPage = async (route, file, html, indexable = true) => { await output(fi
 await addPage("/", "index.html", renderHome(products));
 await addPage("/productos/", "productos/index.html", renderProducts(products));
 await addPage("/nosotros/", "nosotros/index.html", renderAbout());
-await addPage("/soluciones/", "soluciones/index.html", renderSolutions());
 await addPage("/sectores/", "sectores/index.html", renderIndustries());
 await addPage("/servicios/", "servicios/index.html", renderServices());
 await addPage("/exportacion/", "exportacion/index.html", renderExport());
