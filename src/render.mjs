@@ -143,11 +143,12 @@ function layout({title, description, path, active, content, schemas = [], bodyCl
   <meta property="og:description" content="${esc(description)}">
   <meta property="og:url" content="${canonical}">
   <meta name="twitter:card" content="summary">
-  <link rel="icon" href="/assets/favicon-32x32.png?v=20260909" type="image/png" sizes="32x32">
-  <link rel="shortcut icon" href="/assets/favicon-32x32.png?v=20260909" type="image/png">
+  <link rel="icon" href="/assets/favicon-192x192.png?v=20260909-2" type="image/png" sizes="192x192">
+  <link rel="shortcut icon" href="/assets/favicon-192x192.png?v=20260909-2" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/favicon-192x192.png?v=20260909-2" sizes="192x192">
   <link rel="preload" href="/assets/hero-industrial.webp" as="image" type="image/webp" fetchpriority="high">
-  <link rel="preload" href="/assets/styles.css?v=20260909-5" as="style">
-  <link rel="stylesheet" href="/assets/styles.css?v=20260909-5">
+  <link rel="preload" href="/assets/styles.css?v=20260909-7" as="style">
+  <link rel="stylesheet" href="/assets/styles.css?v=20260909-7">
   <script defer src="/assets/site.js?v=20260908-7"></script>
   ${ga4 ? `<script async src="https://www.googletagmanager.com/gtag/js?id=${esc(ga4)}"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${esc(ga4)}',{anonymize_ip:true});</script>` : ""}
   ${allSchemas.map(schema => `<script type="application/ld+json">${json(schema)}</script>`).join("\n  ")}
@@ -270,7 +271,7 @@ export function renderHome(products) {
       <img class="hero-bg" src="/assets/hero-industrial.webp" width="1800" height="1200" fetchpriority="high" alt="Profesional industrial con equipo de protección personal">
       <div class="hero-grid" aria-hidden="true"></div>
       <div class="container hero-content"><div class="hero-copy">${eyebrow("Seguridad industrial B2B · Panamá", true)}<h1 class="display">Protección certificada.<br><span>Respuesta inmediata.</span></h1><p class="hero-lead">Equipos de protección personal para operaciones exigentes. Especialistas en ropa ignífuga, arco eléctrico, guantes técnicos y dotaciones industriales.</p><div class="button-row"><a class="btn btn-primary" href="/productos/">Explorar productos →</a><button class="btn btn-outline" type="button" data-open-quote>Solicitar cotización</button></div></div></div>
-      <aside class="hero-shipping" aria-label="Envío gratis dentro de Ciudad de Panamá para compras superiores a ciento cincuenta dólares"><span class="hero-shipping-icon" aria-hidden="true">✓</span><div><strong>Envío gratis</strong><span>Compras superiores a US$150<br>Ciudad de Panamá<sup>*</sup></span><small>Condiciones aplican.</small></div></aside>
+      <aside class="hero-shipping" aria-label="Envío gratis en Ciudad de Panamá para compras superiores a ciento cincuenta dólares"><span class="hero-shipping-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M3 5h11v10H3V5Zm11 4h3l4 4v2h-7V9ZM7 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm10 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/></svg></span><span class="hero-shipping-copy"><b>Envío gratis</b><small>En Ciudad de Panamá para compras superiores a US$150. Condiciones aplican.</small></span></aside>
       ${partnerBand()}
     </section>
     ${electricalProtectionSection()}

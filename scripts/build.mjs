@@ -176,7 +176,7 @@ function favicon() {
 }
 
 function webManifest() {
-  return JSON.stringify({name:"Maxguantes",short_name:"Maxguantes",description:site.description,start_url:"/",display:"standalone",background_color:"#0b0d0f",theme_color:"#df1f2d",icons:[]}, null, 2);
+  return JSON.stringify({name:"Maxguantes",short_name:"Maxguantes",description:site.description,start_url:"/",display:"standalone",background_color:"#0b0d0f",theme_color:"#df1f2d",icons:[{src:"/assets/favicon-192x192.png",sizes:"192x192",type:"image/png"}]}, null, 2);
 }
 
 function redirects() {
