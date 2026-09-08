@@ -78,11 +78,20 @@ function normalizeProduct(product, index) {
   const sku = String(product.codigo || product.id || `MG-${index + 1}`).trim();
   const name = String(product.nombre || `Producto ${sku}`).trim();
   const brand = String(product.marca || "Maxguantes").trim();
-  const assignedCategories = categoriesFor(product);
+  const explicitCategories = list(product.categorias).map(value => {
+    const normalized = slugify(value);
+    return categories.find(item =>
+      item.slug === normalized ||
+      slugify(item.name) === normalized ||
+      slugify(item.shortName) === normalized
+    )?.slug;
+  }).filter(Boolean);
+  const assignedCategories = [...new Set([...explicitCategories, ...categoriesFor(product)])];
   const category = assignedCategories[0];
   const categoryName = categories.find(item => item.slug === category)?.shortName || "Protección industrial";
   const standards = list(product.certificaciones);
   const sheet = String(product.ficha_tecnica || "").trim();
+  const suppliedSummary = String(product.descripcion || "").trim();
 
   return {
     sku,
@@ -93,19 +102,19 @@ function normalizeProduct(product, index) {
     category,
     categories: assignedCategories,
     categoryName,
-    summary: `${name} ${brand ? `de ${brand}` : ""} para aplicaciones de protección industrial. Disponibilidad y precio sujetos a confirmación.`,
-    description: `Solicite la validación técnica de ${name} según la tarea, el riesgo, las cantidades y las condiciones de uso de su empresa. Maxguantes confirma la referencia, documentación, precio y disponibilidad antes de cada pedido.`,
+    summary: suppliedSummary || `${name} ${brand ? `de ${brand}` : ""} para aplicaciones de protección industrial. Disponibilidad y precio sujetos a confirmación.`,
+    description: suppliedSummary || `Solicite la validación técnica de ${name} según la tarea, el riesgo, las cantidades y las condiciones de uso de su empresa. Maxguantes confirma la referencia, documentación, precio y disponibilidad antes de cada pedido.`,
     image: String(product.imagen || "/assets/product-placeholder.svg").trim(),
     technicalSheet: /^(https?:\/\/|\/)/i.test(sheet) ? sheet : "",
-    featured: Number(product.orden) > 0 && Number(product.orden) <= 6,
-    published: true,
-    specialOrder: false,
+    featured: product.destacado === true || (Number(product.orden) > 0 && Number(product.orden) <= 6),
+    published: product.publicado !== false,
+    specialOrder: product.pedido_especial === true,
     standards: standards.length ? standards : ["Certificaciones según ficha técnica vigente"],
-    features: ["Selección sujeta a validación técnica", "Cotización personalizada", "Disponibilidad confirmada manualmente"],
-    materials: ["Consulte la ficha técnica del fabricante"],
-    variants: ["Presentaciones, tallas o colores según referencia"],
-    seoTitle: `${name} ${sku} en Panamá | Maxguantes`,
-    seoDescription: `Cotice ${name} ${sku} de ${brand}. Asesoría técnica, documentación y disponibilidad confirmada por Maxguantes en Panamá.`
+    features: list(product.caracteristicas).length ? list(product.caracteristicas) : ["Selección sujeta a validación técnica", "Cotización personalizada", "Disponibilidad confirmada manualmente"],
+    materials: list(product.materiales).length ? list(product.materiales) : ["Consulte la ficha técnica del fabricante"],
+    variants: list(product.variantes).length ? list(product.variantes) : ["Presentaciones, tallas o colores según referencia"],
+    seoTitle: String(product.seo_title || "").trim() || `${name} ${sku} en Panamá | Maxguantes`,
+    seoDescription: String(product.seo_description || "").trim() || `Cotice ${name} ${sku} de ${brand}. Asesoría técnica, documentación y disponibilidad confirmada por Maxguantes en Panamá.`
   };
 }
 
