@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 Disallow: /gracias/
+Disallow: /solicitud/
 Sitemap: https://www.maxguantes.com/sitemap.xml

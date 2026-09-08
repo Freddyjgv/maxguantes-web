@@ -3,6 +3,7 @@ import { dirname, join, extname } from "node:path";
 import {
   renderHome,
   renderProducts,
+  renderRequest,
   renderProduct,
   renderCategory,
   renderAbout,
@@ -215,6 +216,7 @@ const addPage = async (route, file, html, indexable = true) => { await output(fi
 
 await addPage("/", "index.html", renderHome(products));
 await addPage("/productos/", "productos/index.html", renderProducts(products));
+await addPage("/solicitud/", "solicitud/index.html", renderRequest(), false);
 await addPage("/nosotros/", "nosotros/index.html", renderAbout());
 await addPage("/sectores/", "sectores/index.html", renderIndustries());
 await addPage("/servicios/", "servicios/index.html", renderServices());
@@ -237,7 +239,7 @@ for (const resource of resources) {
 }
 
 await output("404.html", render404());
-await output("robots.txt", `User-agent: *\nAllow: /\nDisallow: /gracias/\nSitemap: ${site.domain}/sitemap.xml\n`);
+await output("robots.txt", `User-agent: *\nAllow: /\nDisallow: /gracias/\nDisallow: /solicitud/\nSitemap: ${site.domain}/sitemap.xml\n`);
 await output("sitemap.xml", sitemap(sitemapRoutes));
 await output("feed.xml", rssFeed());
 await output("favicon.svg", favicon());
