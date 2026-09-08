@@ -7,8 +7,8 @@
   --mist-2: #f6f8f9;
   --line: #d9dfe3;
   --paper: #ffffff;
-  --signal: #df1f2d;
-  --signal-dark: #b91420;
+  --signal: #bd1825;
+  --signal-dark: #98121c;
   --max: 1220px;
   --shadow: 0 24px 70px rgba(6, 10, 14, .14);
   --header: 84px;
@@ -57,7 +57,7 @@ input, textarea, select { color: var(--ink); }
   text-transform: uppercase;
 }
 .eyebrow::before { content: ""; width: 28px; height: 2px; background: currentColor; }
-.eyebrow.light { color: #ff6973; }
+.eyebrow.light { color: #ffffff; }
 .display {
   max-width: 860px;
   margin: 0;
@@ -171,7 +171,7 @@ input, textarea, select { color: var(--ink); }
 .portwest-authorized-copy { width: min(52%,640px); }
 .portwest-authorized-logo { width: clamp(230px,24vw,330px); height: auto; margin: 0 0 25px; }
 .portwest-authorized-copy > span { display: block; margin-bottom: 12px; color: #f26922; font-size: .72rem; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
-.portwest-authorized-copy h3 { margin: 0 0 16px; color: white; font-size: clamp(2.3rem,4vw,4rem); line-height: .96; letter-spacing: -.05em; }
+.portwest-authorized-copy h2 { margin: 0 0 16px; color: white; font-size: clamp(2.3rem,4vw,4rem); line-height: .96; letter-spacing: -.05em; }
 .portwest-authorized-copy p { max-width: 570px; margin: 0; color: rgba(255,255,255,.82); font-size: .97rem; line-height: 1.65; }
 .portwest-authorized-cta { min-height: 48px; margin-top: 25px; background: #f26922; color: white; }
 .portwest-authorized-cta:hover { background: #dc5415; }
@@ -500,9 +500,9 @@ input:focus, textarea:focus, select:focus { border-color: var(--signal); outline
 .status-mark { width: 72px; height: 72px; display: grid; place-items: center; margin: 0 auto 30px; border-radius: 50%; background: var(--signal); color: white; font-size: 2rem; font-weight: 900; }
 .status-code { display: block; color: var(--signal); font-size: 6rem; font-weight: 950; letter-spacing: -.08em; line-height: .8; }
 
-.whatsapp-float { position: fixed; right: 24px; bottom: 22px; z-index: 39; display: inline-flex; align-items: center; gap: 9px; padding: 9px 15px 9px 9px; border: 1px solid rgba(255,255,255,.35); border-radius: 99px; background: #168b4e; color: white; box-shadow: 0 14px 35px rgba(0,0,0,.22); font-size: .78rem; }
-.whatsapp-float span { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; background: white; color: #168b4e; font-size: .65rem; font-weight: 950; }
-.whatsapp-float:hover { background: #0e7440; }
+.whatsapp-float { position: fixed; right: 24px; bottom: 22px; z-index: 39; display: inline-flex; align-items: center; gap: 9px; padding: 9px 15px 9px 9px; border: 1px solid rgba(255,255,255,.45); border-radius: 99px; background: #107a42; color: white; box-shadow: 0 14px 35px rgba(0,0,0,.22); font-size: .78rem; }
+.whatsapp-float span { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; background: white; color: #107a42; font-size: .65rem; font-weight: 950; }
+.whatsapp-float:hover { background: #0b6b39; }
 
 .quote-overlay { position: fixed; inset: 0; z-index: 80; visibility: hidden; opacity: 0; background: rgba(3,5,7,.65); backdrop-filter: blur(3px); transition: .25s ease; }
 .quote-panel { position: fixed; z-index: 81; top: 0; right: 0; width: min(620px,100%); height: 100dvh; overflow-y: auto; padding: 30px; transform: translateX(101%); background: white; box-shadow: -25px 0 60px rgba(0,0,0,.2); transition: transform .3s ease; }
@@ -673,7 +673,7 @@ input:focus, textarea:focus, select:focus { border-color: var(--signal); outline
   .portwest-authorized-inner { order: 1; min-height: 0; padding: 46px 0 42px; }
   .portwest-authorized-copy { width: 100%; }
   .portwest-authorized-logo { width: 245px; margin-bottom: 22px; }
-  .portwest-authorized-copy h3 { font-size: clamp(2.4rem,12vw,3.35rem); }
+  .portwest-authorized-copy h2 { font-size: clamp(2.4rem,12vw,3.35rem); }
   .portwest-authorized-copy p { font-size: .9rem; }
   .portwest-authorized-cta { width: 100%; }
   .portwest-authorized-media { position: relative; inset: auto; order: 2; height: 330px; }

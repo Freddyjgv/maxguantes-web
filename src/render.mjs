@@ -148,8 +148,8 @@ function layout({title, description, path, active, content, schemas = [], bodyCl
   <meta property="og:url" content="${canonical}">
   <meta name="twitter:card" content="summary">
   <link rel="icon" href="/assets/favicon-32x32.png" type="image/png" sizes="32x32">
-  <link rel="preload" href="/assets/styles.css?v=20260908-3" as="style">
-  <link rel="stylesheet" href="/assets/styles.css?v=20260908-3">
+  <link rel="preload" href="/assets/styles.css?v=20260908-4" as="style">
+  <link rel="stylesheet" href="/assets/styles.css?v=20260908-4">
   <script defer src="/assets/site.js?v=20260904-5"></script>
   ${ga4 ? `<script async src="https://www.googletagmanager.com/gtag/js?id=${esc(ga4)}"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${esc(ga4)}',{anonymize_ip:true});</script>` : ""}
   ${allSchemas.map(schema => `<script type="application/ld+json">${json(schema)}</script>`).join("\n  ")}
@@ -214,7 +214,7 @@ function electricalProtectionSection() {
         <div class="portwest-authorized-copy">
           <img class="portwest-authorized-logo" src="/assets/brands/portwest-reverse.svg" width="429" height="107" loading="lazy" alt="Portwest">
           <span>Distribuidor autorizado.</span>
-          <h3>Protección ignífuga certificada</h3>
+          <h2>Protección ignífuga certificada</h2>
           <p>Desde 1904, Portwest desarrolla ropa de trabajo y EPP para operaciones exigentes, con especialización en prendas resistentes a la llama y presencia en más de 130 países. Maxguantes acerca su catálogo, documentación técnica y atención comercial a empresas y proyectos.</p>
           <a class="btn portwest-authorized-cta" href="/productos/">Ver productos Portwest <b aria-hidden="true">→</b></a>
         </div>
