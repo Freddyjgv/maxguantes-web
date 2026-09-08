@@ -147,8 +147,8 @@ function layout({title, description, path, active, content, schemas = [], bodyCl
   <link rel="shortcut icon" href="/assets/favicon-192x192.png?v=20260909-2" type="image/png">
   <link rel="apple-touch-icon" href="/assets/favicon-192x192.png?v=20260909-2" sizes="192x192">
   <link rel="preload" href="/assets/hero-industrial.webp" as="image" type="image/webp" fetchpriority="high">
-  <link rel="preload" href="/assets/styles.css?v=20260909-7" as="style">
-  <link rel="stylesheet" href="/assets/styles.css?v=20260909-7">
+  <link rel="preload" href="/assets/styles.css?v=20260909-8" as="style">
+  <link rel="stylesheet" href="/assets/styles.css?v=20260909-8">
   <script defer src="/assets/site.js?v=20260908-7"></script>
   ${ga4 ? `<script async src="https://www.googletagmanager.com/gtag/js?id=${esc(ga4)}"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${esc(ga4)}',{anonymize_ip:true});</script>` : ""}
   ${allSchemas.map(schema => `<script type="application/ld+json">${json(schema)}</script>`).join("\n  ")}
@@ -173,23 +173,7 @@ function pageHero({eyebrowText, title, intro, breadcrumb = []}) {
 }
 
 function categoryCards() {
-  return `<div class="category-grid">${categories.map(c => `<a class="category-card" href="/categorias/${c.slug}/"><div class="category-image"><img src="${c.image}" width="92" height="92" loading="lazy" alt="${esc(c.name)}"></div><div class="category-content"><h3>${c.name}</h3><p>${c.description}</p><span class="card-link">Explorar categoría →</span></div></a>`).join("")}</div>`;
-}
-
-function generalProtectionBanner() {
-  return `<section class="epp-range-banner" aria-labelledby="epp-range-title">
-    <div class="epp-range-media">
-      <img src="/assets/epp-general-worker.webp" width="1672" height="941" loading="lazy" alt="Trabajador industrial equipado con casco, lentes, guantes, chaleco reflectivo y calzado de seguridad">
-    </div>
-    <div class="container epp-range-inner">
-      <div class="epp-range-copy">
-        <span>Equipo de protección personal</span>
-        <h2 id="epp-range-title">Protección para cada tarea.<br><em>Soluciones para cada riesgo.</em></h2>
-        <p>Guantes, cascos, lentes, respiración, protección auditiva, calzado, altura y dotaciones complementarias para las exigencias reales de cada operación.</p>
-        <a class="btn btn-primary" href="/productos/">Explorar catálogo completo <b aria-hidden="true">→</b></a>
-      </div>
-    </div>
-  </section>`;
+  return `<div class="home-category-list">${categories.map((c, index) => `<a class="home-category-item" href="/categorias/${c.slug}/"><span class="home-category-index">${String(index + 1).padStart(2,"0")}</span><span class="home-category-image"><img src="${c.image}" width="72" height="72" loading="lazy" alt=""></span><h3>${c.name}</h3><span class="home-category-arrow" aria-hidden="true">→</span></a>`).join("")}</div>`;
 }
 
 function partnerBand() {
@@ -275,11 +259,8 @@ export function renderHome(products) {
       ${partnerBand()}
     </section>
     ${electricalProtectionSection()}
-    ${generalProtectionBanner()}
-    <section class="category-section" aria-label="Categorías de equipos de protección personal"><div class="container">${categoryCards()}</div></section>
+    <section class="home-categories" aria-labelledby="home-categories-title"><div class="container"><header class="home-categories-head"><div>${eyebrow("Equipos de protección personal")}<h2 class="section-title" id="home-categories-title">Protección organizada por necesidad.</h2></div><p>Encuentre rápidamente guantes, cascos, lentes, respiración, protección auditiva, calzado, equipos para altura y dotaciones para riesgos especiales.</p></header>${categoryCards()}<div class="home-categories-action"><a class="btn btn-primary" href="/productos/">Explorar catálogo completo →</a></div></div></section>
     <section class="section"><div class="container"><div class="section-head"><div>${eyebrow("Selección técnica")}<h2 class="section-title">Productos destacados.</h2><p class="section-intro">Referencias de muestra mientras incorporamos el catálogo completo desde Supabase.</p></div><a class="text-link" href="/productos/">Ver productos</a></div>${featured.length ? `<div class="product-grid">${featured.map(productCard).join("")}</div>` : emptyCatalog()}</div></section>
-    <section class="section process"><div class="container">${eyebrow("Un proceso pensado para compras B2B")}<h2 class="section-title">De la necesidad a la<br>cotización, sin fricción.</h2><div class="steps"><article class="step"><span>01</span><h3>Comparta el requerimiento</h3><p>Busque referencias o envíenos su lista, cantidades, tallas y fecha requerida.</p></article><article class="step"><span>02</span><h3>Validamos la información</h3><p>Revisamos aplicación, normas, alternativas y disponibilidad con usted.</p></article><article class="step"><span>03</span><h3>Reciba la propuesta</h3><p>Preparamos la cotización según las condiciones comerciales de su empresa.</p></article></div></div></section>
-    <section class="section story-preview"><div class="container split-layout"><div class="image-frame"><img src="/assets/about-team.webp" width="1800" height="1200" loading="lazy" alt="Equipo técnico revisando una selección de equipos de protección personal"></div><div class="split-copy">${eyebrow("Empresa panameña")}<h2 class="section-title">Una década resolviendo necesidades de protección.</h2><p>Maxguantes nació en Panamá en 2015 para atender empresas que necesitan más que una lista de productos: respuesta, documentación y acompañamiento en la selección.</p><div class="metric-row"><div><strong>2015</strong><span>Año de fundación</span></div><div><strong>B2B</strong><span>Atención especializada</span></div><div><strong>LATAM</strong><span>Alcance comercial</span></div></div><a class="text-link" href="/nosotros/">Conozca nuestra historia</a></div></div></section>
     `;
   return layout({title:"Maxguantes | Equipos de protección personal en Panamá",description:"EPP certificado para empresas: ropa ignífuga, arco eléctrico, guantes, respiración, altura y dotaciones industriales en Panamá.",path:"/",active:"home",content,schemas:[schema],keywords:"equipos de protección personal Panamá, EPP Panamá, seguridad industrial"});
 }
