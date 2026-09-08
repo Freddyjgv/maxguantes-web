@@ -66,6 +66,7 @@ function normalizeProduct(product, index) {
     const primaryCategory = assignedCategories[0] || "proteccion-corporal";
     return {
       ...product,
+      sortOrder: Number.isFinite(Number(product.sortOrder ?? product.orden)) ? Number(product.sortOrder ?? product.orden) : 9999,
       category: primaryCategory,
       categories: assignedCategories,
       categoryName: categories.find(item => item.slug === primaryCategory)?.shortName || product.categoryName || "Protección industrial",
@@ -107,7 +108,8 @@ function normalizeProduct(product, index) {
     description: suppliedSummary || `Solicite la validación técnica de ${name} según la tarea, el riesgo, las cantidades y las condiciones de uso de su empresa. Maxguantes confirma la referencia, documentación, precio y disponibilidad antes de cada pedido.`,
     image: String(product.imagen || "/assets/product-placeholder.svg").trim(),
     technicalSheet: /^(https?:\/\/|\/)/i.test(sheet) ? sheet : "",
-    featured: product.destacado === true || (Number(product.orden) > 0 && Number(product.orden) <= 6),
+    featured: product.destacado === true,
+    sortOrder: Number.isFinite(Number(product.orden)) ? Number(product.orden) : 9999,
     published: product.publicado !== false,
     specialOrder: product.pedido_especial === true,
     standards: standards.length ? standards : ["Certificaciones según ficha técnica vigente"],

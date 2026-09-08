@@ -248,7 +248,10 @@ function emptyCatalog() {
 }
 
 export function renderHome(products) {
-  const featured = products.filter(p => p.featured).slice(0,3);
+  const featured = products
+    .filter(product => product.featured)
+    .sort((a, b) => (a.sortOrder ?? 9999) - (b.sortOrder ?? 9999) || a.name.localeCompare(b.name, "es"))
+    .slice(0,3);
   const schema = {"@context":"https://schema.org","@type":"WebSite","@id":`${site.domain}/#website`,url:site.domain,name:site.name,description:site.description,inLanguage:"es-PA",publisher:{"@id":`${site.domain}/#organization`}};
   const content = `
     <section class="hero">
