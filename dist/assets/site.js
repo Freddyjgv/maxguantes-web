@@ -28,7 +28,19 @@
 
   let quote = safeParse(localStorage.getItem(storageKey), []).filter(item =>
     item && typeof item.code === "string" && typeof item.name === "string"
-  ).map(item => ({ ...item, quantity: Math.max(1, Number.parseInt(item.quantity, 10) || 1), sizes: String(item.sizes || ""), note: String(item.note || "") }));
+  ).map(item => ({
+    ...item,
+    key: String(item.key || `${item.code}::${item.variantLabel || item.sizes || "base"}`),
+    variantLabel: String(item.variantLabel || ""),
+    variantAttributes: item.variantAttributes && typeof item.variantAttributes === "object" ? item.variantAttributes : {},
+    variantId: item.variantId || null,
+    parentCode: String(item.parentCode || item.code),
+    dolibarrProductId: item.dolibarrProductId || null,
+    dolibarrRef: String(item.dolibarrRef || ""),
+    quantity: Math.max(1, Number.parseInt(item.quantity, 10) || 1),
+    sizes: String(item.sizes || ""),
+    note: String(item.note || "")
+  }));
 
   function persistQuote() {
     localStorage.setItem(storageKey, JSON.stringify(quote));
@@ -39,6 +51,9 @@
   function serializedQuote() {
     return quote.map(item => [
       `${item.code} — ${item.name}`,
+      item.variantLabel ? `Variante: ${item.variantLabel}` : "",
+      item.dolibarrRef ? `Referencia Dolibarr: ${item.dolibarrRef}` : "",
+      item.dolibarrProductId ? `ID Dolibarr: ${item.dolibarrProductId}` : "",
       `Cantidad: ${item.quantity}`,
       item.sizes ? `Tallas/distribución: ${item.sizes}` : "",
       item.note ? `Observación: ${item.note}` : ""
@@ -102,6 +117,7 @@
     const info = makeElement("div", "quote-item-info");
     info.append(makeElement("small", "", item.code));
     info.append(makeElement("strong", "", item.name));
+    if (item.variantLabel) info.append(makeElement("span", "quote-variant", item.variantLabel));
     const controls = makeElement("div", "inline-quantity");
     const minus = makeElement("button", "", "−");
     const quantity = document.createElement("input");
@@ -125,8 +141,8 @@
     const image = document.createElement("img");
     image.src = item.image || "/assets/product-placeholder.svg"; image.alt = ""; image.width = 96; image.height = 96;
     const fields = makeElement("div", "request-item-fields");
-    const sizesLabel = makeElement("label", "", "Tallas o distribución (opcional)");
-    const sizes = document.createElement("input"); sizes.value = item.sizes; sizes.placeholder = "Ej.: 5 M, 10 L, 4 XL";
+    const sizesLabel = makeElement("label", "", item.variantLabel ? "Distribución adicional (opcional)" : "Tallas o distribución (opcional)");
+    const sizes = document.createElement("input"); sizes.value = item.sizes; sizes.placeholder = item.variantLabel ? "Ej.: 5 unidades adicionales talla M" : "Ej.: 5 M, 10 L, 4 XL";
     sizes.addEventListener("input", () => { item.sizes = sizes.value; persistQuote(); syncQuoteFields(); });
     sizesLabel.append(sizes);
     const noteLabel = makeElement("label", "", "Observación (opcional)");
@@ -165,18 +181,45 @@
     });
   });
 
+  const readVariant = (container, button) => {
+    const selector = container?.querySelector("[data-product-variant]");
+    const selected = selector?.selectedOptions?.[0];
+    const custom = container?.querySelector("[data-product-custom-variant]");
+    let attributes = {};
+    try { attributes = JSON.parse(selected?.dataset.variantAttributes || "{}"); } catch { attributes = {}; }
+    const customLabel = String(custom?.value || "").trim();
+    return {
+      code: selected?.value || button.dataset.code || "Referencia",
+      label: selected?.dataset.variantLabel || customLabel,
+      attributes,
+      id: selected?.dataset.variantId || null,
+      dolibarrProductId: selected?.dataset.dolibarrProductId || button.dataset.dolibarrProductId || null,
+      dolibarrRef: selected?.dataset.dolibarrRef || button.dataset.dolibarrRef || ""
+    };
+  };
+
   document.querySelectorAll(".add-quote").forEach(button => {
     button.addEventListener("click", () => {
-      const requestedQuantity = Math.max(1, Number.parseInt(button.closest(".product-body, .product-summary")?.querySelector("[data-product-quantity]")?.value, 10) || 1);
+      const container = button.closest(".product-body, .product-summary");
+      const requestedQuantity = Math.max(1, Number.parseInt(container?.querySelector("[data-product-quantity]")?.value, 10) || 1);
+      const variant = readVariant(container, button);
+      const parentCode = button.dataset.code || "Referencia";
       const item = {
-        code: button.closest(".product-summary")?.querySelector("[data-product-variant]")?.value || button.dataset.code || "Referencia",
+        key: `${parentCode}::${variant.code}::${variant.label || "base"}`,
+        code: variant.code,
+        parentCode,
         name: button.dataset.name || "Producto",
         image: button.dataset.image || "",
+        variantLabel: variant.label,
+        variantAttributes: variant.attributes,
+        variantId: variant.id,
+        dolibarrProductId: variant.dolibarrProductId,
+        dolibarrRef: variant.dolibarrRef,
         quantity: requestedQuantity,
         sizes: "",
         note: ""
       };
-      const existing = quote.find(product => product.code === item.code);
+      const existing = quote.find(product => product.key === item.key);
       if (!existing) {
         quote.push(item);
         persistQuote();
@@ -227,7 +270,7 @@
       `*Teléfono:* ${data.get("telefono") || ""}`,
       `*Email:* ${data.get("email") || ""}`,
       "------------------------------------------",
-      ...quote.flatMap((item, index) => [`*${index + 1}. ${item.code} — ${item.name}*`, `   Cantidad: ${item.quantity}`, item.sizes ? `   Tallas/distribución: ${item.sizes}` : "", item.note ? `   Observación: ${item.note}` : "", ""]),
+      ...quote.flatMap((item, index) => [`*${index + 1}. ${item.code} — ${item.name}*`, item.variantLabel ? `   Variante: ${item.variantLabel}` : "", item.dolibarrRef ? `   Ref. Dolibarr: ${item.dolibarrRef}` : "", item.dolibarrProductId ? `   ID Dolibarr: ${item.dolibarrProductId}` : "", `   Cantidad: ${item.quantity}`, item.sizes ? `   Tallas/distribución: ${item.sizes}` : "", item.note ? `   Observación: ${item.note}` : "", ""]),
       "------------------------------------------",
       data.get("mensaje") ? `*Información adicional:* ${data.get("mensaje")}` : "",
       "_Enviado desde maxguantes.com_"

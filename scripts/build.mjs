@@ -73,7 +73,9 @@ function normalizeProduct(product, index) {
       standards: list(product.standards),
       features: list(product.features),
       materials: list(product.materials),
-      variants: list(product.variants)
+      variants: list(product.variants),
+      dolibarrProductId: product.dolibarrProductId ?? product.dolibarr_product_id ?? null,
+      dolibarrRef: product.dolibarrRef ?? product.dolibarr_ref ?? ""
     };
   }
 
@@ -119,6 +121,8 @@ function normalizeProduct(product, index) {
       ? product.structuredVariants.map(variant => variant.label || Object.values(variant.attributes || {}).filter(Boolean).join(" · ") || variant.public_code)
       : list(product.variantes).length ? list(product.variantes) : ["Presentaciones, tallas o colores según referencia"],
     structuredVariants: Array.isArray(product.structuredVariants) ? product.structuredVariants : [],
+    dolibarrProductId: product.dolibarr_product_id ?? null,
+    dolibarrRef: String(product.dolibarr_ref || "").trim(),
     seoTitle: String(product.seo_title || "").trim() || `${name} ${sku} en Panamá | Maxguantes`,
     seoDescription: String(product.seo_description || "").trim() || `Cotice ${name} ${sku} de ${brand}. Asesoría técnica, documentación y disponibilidad confirmada por Maxguantes en Panamá.`
   };
