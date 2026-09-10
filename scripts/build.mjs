@@ -77,7 +77,7 @@ function normalizeProduct(product, index) {
     };
   }
 
-  const sku = String(product.codigo || product.id || `MG-${index + 1}`).trim();
+  const sku = String(product.public_code || product.codigo || product.id || `MG-${index + 1}`).trim();
   const name = String(product.nombre || `Producto ${sku}`).trim();
   const brand = String(product.marca || "Maxguantes").trim();
   const explicitCategories = list(product.categorias).map(value => {
@@ -115,7 +115,10 @@ function normalizeProduct(product, index) {
     standards: standards.length ? standards : ["Certificaciones según ficha técnica vigente"],
     features: list(product.caracteristicas).length ? list(product.caracteristicas) : ["Selección sujeta a validación técnica", "Cotización personalizada", "Disponibilidad confirmada manualmente"],
     materials: list(product.materiales).length ? list(product.materiales) : ["Consulte la ficha técnica del fabricante"],
-    variants: list(product.variantes).length ? list(product.variantes) : ["Presentaciones, tallas o colores según referencia"],
+    variants: Array.isArray(product.structuredVariants) && product.structuredVariants.length
+      ? product.structuredVariants.map(variant => variant.label || Object.values(variant.attributes || {}).filter(Boolean).join(" · ") || variant.public_code)
+      : list(product.variantes).length ? list(product.variantes) : ["Presentaciones, tallas o colores según referencia"],
+    structuredVariants: Array.isArray(product.structuredVariants) ? product.structuredVariants : [],
     seoTitle: String(product.seo_title || "").trim() || `${name} ${sku} en Panamá | Maxguantes`,
     seoDescription: String(product.seo_description || "").trim() || `Cotice ${name} ${sku} de ${brand}. Asesoría técnica, documentación y disponibilidad confirmada por Maxguantes en Panamá.`
   };
@@ -129,14 +132,23 @@ async function loadProducts() {
   if (!baseUrl || !apiKey) return local.filter(product => product.published !== false);
 
   try {
-    const response = await fetch(`${baseUrl}/rest/v1/${encodeURIComponent(view)}?select=*`, {
-      headers: { apikey: apiKey, Authorization: `Bearer ${apiKey}` }
-    });
-    if (!response.ok) throw new Error(`Supabase respondió ${response.status}`);
-    const products = await response.json();
+    const headers = { apikey: apiKey, Authorization: `Bearer ${apiKey}` };
+    const [productResponse, variantResponse] = await Promise.all([
+      fetch(`${baseUrl}/rest/v1/${encodeURIComponent(view)}?select=*`, { headers }),
+      fetch(`${baseUrl}/rest/v1/catalogo_variantes?select=*&active=eq.true&published=eq.true&order=sort_order.asc`, { headers })
+    ]);
+    if (!productResponse.ok) throw new Error(`Supabase respondió ${productResponse.status}`);
+    const products = await productResponse.json();
+    const variants = variantResponse.ok ? await variantResponse.json() : [];
     if (!Array.isArray(products)) throw new Error("La respuesta de Supabase no es una lista");
+    const variantsByProduct = new Map();
+    for (const variant of variants) {
+      if (!variantsByProduct.has(variant.product_id)) variantsByProduct.set(variant.product_id, []);
+      variantsByProduct.get(variant.product_id).push(variant);
+    }
     const normalized = products
-      .map(normalizeProduct)
+      .filter(product => product.catalog_status == null || product.catalog_status === "active")
+      .map((product, index) => normalizeProduct({ ...product, structuredVariants: variantsByProduct.get(product.id) || [] }, index))
       .filter(product => product.published !== false && product.slug && product.sku && product.name)
       .sort((a, b) => a.name.localeCompare(b.name, "es"));
     if (!normalized.length) throw new Error("Supabase no devolvió productos publicables");

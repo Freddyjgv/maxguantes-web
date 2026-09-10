@@ -855,6 +855,7 @@ input:focus, textarea:focus, select:focus { border-color: var(--signal); outline
 .product-purchase > .add-quote { align-self: stretch; width: 82px; min-width: 0; min-height: 0 !important; height: 34px !important; margin: 0 !important; overflow: hidden; padding: 0 6px !important; box-sizing: border-box; font-size: .62rem !important; line-height: 1; white-space: nowrap; }
 .product-purchase > .icon-button { align-self: stretch; width: 32px; min-width: 0; height: 34px; margin: 0; box-sizing: border-box; }
 .detail-add-row { display: flex; align-items: stretch; gap: 10px; margin-top: 18px; }
+.product-variant-picker{display:grid;gap:7px;margin-top:18px}.product-variant-picker span{font-size:.75rem;font-weight:800}.product-variant-picker select{min-height:48px;padding:0 12px;border:1px solid var(--line);background:#fff;color:var(--ink)}
 .quantity-picker-large { grid-template-columns: 44px 58px 44px; }
 .quantity-picker-large button, .quantity-picker-large input { height: 52px; }
 .quantity-picker-large button { width: 44px; }

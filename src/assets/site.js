@@ -169,7 +169,7 @@
     button.addEventListener("click", () => {
       const requestedQuantity = Math.max(1, Number.parseInt(button.closest(".product-body, .product-summary")?.querySelector("[data-product-quantity]")?.value, 10) || 1);
       const item = {
-        code: button.dataset.code || "Referencia",
+        code: button.closest(".product-summary")?.querySelector("[data-product-variant]")?.value || button.dataset.code || "Referencia",
         name: button.dataset.name || "Producto",
         image: button.dataset.image || "",
         quantity: requestedQuantity,
