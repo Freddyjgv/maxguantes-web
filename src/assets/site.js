@@ -201,6 +201,14 @@
   document.querySelectorAll(".add-quote").forEach(button => {
     button.addEventListener("click", () => {
       const container = button.closest(".product-body, .product-summary");
+      const selector = container?.querySelector("[data-product-variant]");
+      if (selector && !selector.value) {
+        selector.setCustomValidity("Selecciona una variante antes de agregar el producto.");
+        selector.reportValidity();
+        selector.focus();
+        selector.addEventListener("change", () => selector.setCustomValidity(""), { once: true });
+        return;
+      }
       const requestedQuantity = Math.max(1, Number.parseInt(container?.querySelector("[data-product-quantity]")?.value, 10) || 1);
       const variant = readVariant(container, button);
       const parentCode = button.dataset.code || "Referencia";
