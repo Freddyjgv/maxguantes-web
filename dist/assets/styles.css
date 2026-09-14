@@ -173,7 +173,7 @@ input, textarea, select { color: var(--ink); }
 .portwest-authorized::after { content: ""; position: absolute; top: 0; right: 0; z-index: 3; width: 8px; height: 100%; background: #f26922; }
 .portwest-authorized-media { position: absolute; inset: 0 0 0 48%; overflow: hidden; background: #003e52; }
 .portwest-authorized-media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg,#003e52 0%,rgba(0,62,82,.94) 6%,rgba(0,62,82,.45) 34%,rgba(0,62,82,.04) 70%); }
-.portwest-authorized-media img { width: 100%; height: 100%; object-fit: cover; object-position: center; transform: scaleX(-1); }
+.portwest-authorized-media img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
 .portwest-authorized-inner { position: relative; z-index: 2; min-height: 480px; display: flex; align-items: center; padding: 52px 0 98px; }
 .portwest-authorized-copy { width: min(52%,640px); }
 .portwest-authorized-logo { width: clamp(230px,24vw,330px); height: auto; margin: 0 0 25px; }
