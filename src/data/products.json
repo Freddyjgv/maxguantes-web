@@ -13,7 +13,7 @@
     "featured": true,
     "published": true,
     "specialOrder": false,
-    "standards": ["EN ISO 21420:2020", "EN 388:2016 + A1:2018 4X42D", "EN 407:2020 41XXXX", "ASTM F2675-13 Clase 2", "ANSI/ISEA 105 Corte A5"],
+    "standards": ["EN ISO 21420:2020", "EN 388:2016 + A1:2018 4X42D", "EN 407:2020 41XXXX", "ASTM F2675-13 Clase 2", "ANSI/ISEA 105 Corte A4"],
     "features": ["ATPV 9,5 cal/cm²", "Soporte de aramida galga 13", "Palma con neopreno resistente a la llama", "Alta destreza y agarre", "Protección anticorte nivel D"],
     "materials": ["Aramida", "Fibra de vidrio", "Neopreno"],
     "variants": ["Tallas por confirmar"],
