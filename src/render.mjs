@@ -147,9 +147,9 @@ function layout({title, description, path, active, content, schemas = [], bodyCl
   <link rel="shortcut icon" href="/assets/favicon-192x192.png?v=20260909-2" type="image/png">
   <link rel="apple-touch-icon" href="/assets/favicon-192x192.png?v=20260909-2" sizes="192x192">
   <link rel="preload" href="/assets/hero-industrial.webp" as="image" type="image/webp" fetchpriority="high">
-  <link rel="preload" href="/assets/styles.css?v=20261007-5" as="style">
-  <link rel="stylesheet" href="/assets/styles.css?v=20261007-5">
-  <script defer src="/assets/site.js?v=20261007-5"></script>
+  <link rel="preload" href="/assets/styles.css?v=20261007-6" as="style">
+  <link rel="stylesheet" href="/assets/styles.css?v=20261007-6">
+  <script defer src="/assets/site.js?v=20261007-6"></script>
   ${ga4 ? `<script async src="https://www.googletagmanager.com/gtag/js?id=${esc(ga4)}"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${esc(ga4)}',{anonymize_ip:true});</script>` : ""}
   ${allSchemas.map(schema => `<script type="application/ld+json">${json(schema)}</script>`).join("\n  ")}
 </head>
