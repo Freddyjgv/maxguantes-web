@@ -189,12 +189,12 @@ function rssFeed() {
 <rss version="2.0"><channel><title>Recursos técnicos Maxguantes</title><link>${site.domain}/recursos/</link><description>Información práctica sobre EPP y seguridad industrial.</description><language>es-pa</language>${resources.map(resource => `<item><title>${xmlEscape(resource.title)}</title><link>${site.domain}/recursos/${resource.slug}/</link><guid>${site.domain}/recursos/${resource.slug}/</guid><pubDate>${new Date(resource.date + "T12:00:00Z").toUTCString()}</pubDate><description>${xmlEscape(resource.excerpt)}</description></item>`).join("")}</channel></rss>`;
 }
 
-function favicon() {
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="8" fill="#0b0d0f"/><path d="M12 16h11l9 19 9-19h11L37 50H27z" fill="#df1f2d"/></svg>`;
+function favicon(pngBase64) {
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><image width="192" height="192" href="data:image/png;base64,${pngBase64}"/></svg>`;
 }
 
 function webManifest() {
-  return JSON.stringify({name:"Maxguantes",short_name:"Maxguantes",description:site.description,start_url:"/",display:"standalone",background_color:"#0b0d0f",theme_color:"#df1f2d",icons:[{src:"/assets/favicon-192x192.png",sizes:"192x192",type:"image/png"}]}, null, 2);
+  return JSON.stringify({name:"Maxguantes",short_name:"Maxguantes",description:site.description,start_url:"/",display:"standalone",background_color:"#0b0d0f",theme_color:"#df1f2d",icons:[{src:"/assets/favicon-32x32.png",sizes:"32x32",type:"image/png"},{src:"/assets/favicon-192x192.png",sizes:"192x192",type:"image/png"}]}, null, 2);
 }
 
 function redirects() {
@@ -260,7 +260,8 @@ await output("404.html", render404());
 await output("robots.txt", `User-agent: *\nAllow: /\nDisallow: /gracias/\nDisallow: /solicitud/\nSitemap: ${site.domain}/sitemap.xml\n`);
 await output("sitemap.xml", sitemap(sitemapRoutes));
 await output("feed.xml", rssFeed());
-await output("favicon.svg", favicon());
+const officialFavicon = await readFile(join(root, "src/assets/favicon-192x192.png"));
+await output("favicon.svg", favicon(officialFavicon.toString("base64")));
 await output("site.webmanifest", webManifest());
 await output("_redirects", redirects());
 await output("_headers", headers());
