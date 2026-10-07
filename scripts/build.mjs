@@ -239,7 +239,7 @@ await addPage("/nosotros/", "nosotros/index.html", renderAbout());
 await addPage("/sectores/", "sectores/index.html", renderIndustries());
 await addPage("/servicios/", "servicios/index.html", renderServices());
 await addPage("/exportacion/", "exportacion/index.html", renderExport());
-await addPage("/recursos/", "recursos/index.html", renderResources());
+await addPage("/recursos/", "recursos/index.html", renderResources(products));
 await addPage("/contacto/", "contacto/index.html", renderContact());
 await addPage("/privacidad/", "privacidad/index.html", renderPrivacy());
 await addPage("/gracias/", "gracias/index.html", renderThanks(), false);
@@ -253,7 +253,7 @@ for (const category of categories) {
 }
 
 for (const resource of resources) {
-  await addPage(`/recursos/${resource.slug}/`, `recursos/${resource.slug}/index.html`, renderResource(resource));
+  await addPage(`/recursos/${resource.slug}/`, `recursos/${resource.slug}/index.html`, renderResource(resource, products));
 }
 
 await output("404.html", render404());
