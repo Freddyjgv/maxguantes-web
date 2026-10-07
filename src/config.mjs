@@ -119,6 +119,45 @@ export const brands = [
   { name: "Best Value", image: "/assets/brands/best-value.webp" }
 ];
 
+export const specialOrderCatalogs = [
+  {
+    brand: "Portwest",
+    title: "Catálogo de ropa resistente a la llama",
+    description: "Selección especializada de prendas FR para operaciones industriales, energía, mantenimiento y entornos con exposición térmica.",
+    image: "/assets/catalogs/portwest-fr.webp",
+    imageAlt: "Portada del catálogo Portwest de ropa resistente a la llama",
+    fileSize: "25,8 MB",
+    url: "https://tgghrbbjxdvklptqzwmi.supabase.co/storage/v1/object/public/productos/catalogos_pdf/%20Portwest%20-%20FR%20Mini%20Catalogue%20-%20SPANISH_compressed.pdf"
+  },
+  {
+    brand: "General Electric",
+    title: "Catálogo de equipos de protección personal 2025",
+    description: "Portafolio de equipos de protección personal GE para distintas necesidades de seguridad y operación industrial.",
+    image: "/assets/catalogs/ge-epp-2025.webp",
+    imageAlt: "Portada del catálogo General Electric de equipos de protección personal 2025",
+    fileSize: "19,9 MB",
+    url: "https://tgghrbbjxdvklptqzwmi.supabase.co/storage/v1/object/public/productos/catalogos_pdf/Catalogo%20GE%202025.pdf"
+  },
+  {
+    brand: "Ansell",
+    title: "Catálogo de protección eléctrica",
+    description: "Soluciones Ansell para protección de manos en trabajos eléctricos y aplicaciones que requieren equipos especializados.",
+    image: "/assets/catalogs/ansell-electrica.webp",
+    imageAlt: "Portada del catálogo Ansell de protección eléctrica",
+    fileSize: "2,8 MB",
+    url: "https://tgghrbbjxdvklptqzwmi.supabase.co/storage/v1/object/public/productos/catalogos_pdf/Ansell%20dielectricos%20catalogo.pdf"
+  },
+  {
+    brand: "3M",
+    title: "Catálogo de protección respiratoria",
+    description: "Alternativas 3M de respiradores, máscaras, filtros y accesorios para programas de protección respiratoria.",
+    image: "/assets/catalogs/3m-respiratoria.webp",
+    imageAlt: "Portada del catálogo 3M de protección respiratoria",
+    fileSize: "3 MB",
+    url: "https://tgghrbbjxdvklptqzwmi.supabase.co/storage/v1/object/public/productos/catalogos_pdf/PROTECCION-RESPIRATORIA%203M.pdf"
+  }
+];
+
 export const resources = [
   {
     slug: "guia-tallas-portwest",
