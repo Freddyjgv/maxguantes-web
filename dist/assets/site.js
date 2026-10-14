@@ -333,8 +333,18 @@
   const pageNext = document.querySelector("[data-page-next]");
   const activeFilters = document.querySelector("[data-active-filters]");
   const pageSize = 18;
+  const groupLabels = {
+    "proteccion-electrica": "Protección eléctrica especializada",
+    "ropa-fr-ar": "Ropa FR, AR y antiestática",
+    "guantes-electricos": "Guantes para riesgo eléctrico",
+    "proteccion-facial-arco": "Protección facial contra arco",
+    "cascos-dielectricos": "Cascos dieléctricos",
+    "arneses-electricos": "Arneses para riesgo eléctrico",
+    "calzado-dielectrico": "Calzado dieléctrico"
+  };
   let activeCategory = "all";
   let activeBrand = "all";
+  let activeGroup = "";
   let currentPage = 1;
 
   const normalizeSearch = value => String(value || "")
@@ -349,8 +359,10 @@
     const params = new URLSearchParams(window.location.search);
     const category = params.get("categoria") || "all";
     const brand = params.get("marca") || "all";
+    const group = params.get("grupo") || "";
     activeCategory = categoryFilters.some(button => button.dataset.filterCategory === category) ? category : "all";
     activeBrand = brandFilters.some(button => button.dataset.filterBrand === brand) ? brand : "all";
+    activeGroup = Object.hasOwn(groupLabels, group) ? group : "";
     currentPage = Math.max(1, Number.parseInt(params.get("pagina"), 10) || 1);
     if (search) search.value = params.get("q") || "";
   }
@@ -360,6 +372,7 @@
     const term = search?.value.trim() || "";
     activeCategory === "all" ? url.searchParams.delete("categoria") : url.searchParams.set("categoria", activeCategory);
     activeBrand === "all" ? url.searchParams.delete("marca") : url.searchParams.set("marca", activeBrand);
+    activeGroup ? url.searchParams.set("grupo", activeGroup) : url.searchParams.delete("grupo");
     term ? url.searchParams.set("q", term) : url.searchParams.delete("q");
     currentPage > 1 ? url.searchParams.set("pagina", String(currentPage)) : url.searchParams.delete("pagina");
     history[mode === "push" ? "pushState" : "replaceState"]({}, "", `${url.pathname}${url.search}${url.hash}`);
@@ -375,7 +388,8 @@
       const value = button.dataset.filterCategory || "all";
       const count = cards.filter(card => {
         const categories = (card.dataset.categories || "").split(/\s+/).filter(Boolean);
-        return (activeBrand === "all" || card.dataset.brandSlug === activeBrand) && matchesSearch(card, term) && (value === "all" || categories.includes(value));
+        const groups = (card.dataset.groups || "").split(/\s+/).filter(Boolean);
+        return (!activeGroup || groups.includes(activeGroup)) && (activeBrand === "all" || card.dataset.brandSlug === activeBrand) && matchesSearch(card, term) && (value === "all" || categories.includes(value));
       }).length;
       button.querySelector("span").textContent = String(count);
       button.classList.toggle("active", value === activeCategory);
@@ -386,7 +400,8 @@
       const value = button.dataset.filterBrand || "all";
       const count = cards.filter(card => {
         const categories = (card.dataset.categories || "").split(/\s+/).filter(Boolean);
-        return (activeCategory === "all" || categories.includes(activeCategory)) && matchesSearch(card, term) && (value === "all" || card.dataset.brandSlug === value);
+        const groups = (card.dataset.groups || "").split(/\s+/).filter(Boolean);
+        return (!activeGroup || groups.includes(activeGroup)) && (activeCategory === "all" || categories.includes(activeCategory)) && matchesSearch(card, term) && (value === "all" || card.dataset.brandSlug === value);
       }).length;
       button.querySelector("span").textContent = String(count);
       button.classList.toggle("active", value === activeBrand);
@@ -410,6 +425,7 @@
     };
     if (activeCategory !== "all") add(`Categoría: ${buttonLabel(categoryFilters.find(button => button.dataset.filterCategory === activeCategory))}`, () => { activeCategory = "all"; });
     if (activeBrand !== "all") add(`Marca: ${buttonLabel(brandFilters.find(button => button.dataset.filterBrand === activeBrand))}`, () => { activeBrand = "all"; });
+    if (activeGroup) add(groupLabels[activeGroup], () => { activeGroup = ""; });
     if (term) add(`Búsqueda: ${search.value.trim()}`, () => { search.value = ""; });
   }
 
@@ -439,7 +455,8 @@
     const term = normalizeSearch(search?.value);
     const matched = cards.filter(card => {
       const categories = (card.dataset.categories || "").split(/\s+/).filter(Boolean);
-      return (activeCategory === "all" || categories.includes(activeCategory)) && (activeBrand === "all" || card.dataset.brandSlug === activeBrand) && matchesSearch(card, term);
+      const groups = (card.dataset.groups || "").split(/\s+/).filter(Boolean);
+      return (!activeGroup || groups.includes(activeGroup)) && (activeCategory === "all" || categories.includes(activeCategory)) && (activeBrand === "all" || card.dataset.brandSlug === activeBrand) && matchesSearch(card, term);
     });
     const totalPages = Math.max(1, Math.ceil(matched.length / pageSize));
     currentPage = Math.min(Math.max(1, currentPage), totalPages);
@@ -473,6 +490,7 @@
   document.querySelectorAll("[data-clear-catalog]").forEach(button => button.addEventListener("click", () => {
     activeCategory = "all";
     activeBrand = "all";
+    activeGroup = "";
     currentPage = 1;
     if (search) search.value = "";
     renderCatalog({ urlMode: "push" });
