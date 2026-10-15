@@ -41,6 +41,34 @@ for (const expected of ["index.html","robots.txt","sitemap.xml","_redirects","_h
   try { await stat(join(dist, expected)); } catch { failures.push(`Falta ${expected}`); }
 }
 
+try {
+  const redirectsText = await readFile(join(dist, "_redirects"), "utf8");
+  const redirectLines = redirectsText
+    .split(/\r?\n/)
+    .map(line => line.trim())
+    .filter(line => line && !line.startsWith("#"));
+  const wordpressRedirects = redirectLines.filter(line => line.startsWith("/wp-content/uploads/"));
+  const wordpressSources = wordpressRedirects.map(line => line.split(/\s+/)[0]);
+  const normalizedWordpressSources = wordpressSources.map(source => encodeURI(decodeURI(source)));
+  const unicodeCompatibilityRules = wordpressSources.filter(source => /[^\x00-\x7F]/.test(source));
+  if (wordpressRedirects.length !== 287) {
+    failures.push(`_redirects: se esperaban 285 rutas canónicas y 2 variantes Unicode; hay ${wordpressRedirects.length} reglas`);
+  }
+  if (new Set(normalizedWordpressSources).size !== 285) {
+    failures.push("_redirects: el conjunto normalizado no contiene exactamente 285 rutas WordPress");
+  }
+  if (unicodeCompatibilityRules.length !== 2) {
+    failures.push(`_redirects: se esperaban 2 variantes Unicode para Netlify Dev y hay ${unicodeCompatibilityRules.length}`);
+  }
+  for (const line of wordpressRedirects) {
+    if (!/^\/wp-content\/uploads\/\S+\s+https:\/\/tgghrbbjxdvklptqzwmi\.supabase\.co\/storage\/v1\/object\/public\/productos\/\S+\s+301!$/.test(line)) {
+      failures.push(`_redirects: regla WordPress inválida: ${line}`);
+    }
+  }
+} catch {
+  failures.push("No se pudo validar dist/_redirects");
+}
+
 if (failures.length) {
   console.error(failures.join("\n"));
   process.exit(1);

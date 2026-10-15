@@ -24,6 +24,8 @@ import {
 const root = new URL("../", import.meta.url).pathname;
 const dist = join(root, "dist");
 const dataFile = join(root, "src/data/products.json");
+const legacyRedirectsFile = join(root, "src/legacy-wordpress-redirects.txt");
+const legacyWordpressRedirects = (await readFile(legacyRedirectsFile, "utf8")).trim();
 
 function slugify(value) {
   return String(value || "producto")
@@ -198,7 +200,8 @@ function webManifest() {
 }
 
 function redirects() {
-  return `/producto/a780-guante-contra-arco-electrico-ignifugo-y-anticorte /productos/a780/ 301
+  return `${legacyWordpressRedirects}
+/producto/a780-guante-contra-arco-electrico-ignifugo-y-anticorte /productos/a780/ 301
 /ventas-internacionales /exportacion/ 301
 /nosotros /nosotros/ 301
 /contacto /contacto/ 301
