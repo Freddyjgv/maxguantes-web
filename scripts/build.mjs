@@ -42,6 +42,18 @@ function list(value) {
   return String(value).split(/\r?\n|;|,|\s*\|\s*/).map(item => item.trim()).filter(Boolean);
 }
 
+function documentUrls(value) {
+  return [...new Set(list(value)
+    .map(item => String(item).trim())
+    .filter(item => /^(https?:\/\/|\/)/i.test(item)))];
+}
+
+function productDocuments(product) {
+  const multiple = documentUrls(product.technicalSheets ?? product.fichas_tecnicas);
+  const legacy = documentUrls(product.technicalSheet ?? product.ficha_tecnica);
+  return multiple.length ? multiple : legacy;
+}
+
 function categoriesFor(product) {
   const type = slugify(product.tipo || "");
   const text = slugify([product.tipo, product.nombre, product.codigo].filter(Boolean).join(" "));
@@ -66,6 +78,8 @@ function normalizeProduct(product, index) {
     const inferredCategories = categoriesFor({ tipo: product.categoryName || product.category, nombre: product.name, codigo: product.sku });
     const assignedCategories = [...new Set([...existingCategories, ...inferredCategories])];
     const primaryCategory = assignedCategories[0] || "proteccion-corporal";
+    const technicalSheets = productDocuments(product);
+    const sizeChart = documentUrls(product.sizeChart ?? product.tabla_tallas_url)[0] || "";
     return {
       ...product,
       sortOrder: Number.isFinite(Number(product.sortOrder ?? product.orden)) ? Number(product.sortOrder ?? product.orden) : 9999,
@@ -76,6 +90,9 @@ function normalizeProduct(product, index) {
       features: list(product.features),
       materials: list(product.materials),
       variants: list(product.variants),
+      technicalSheet: technicalSheets[0] || "",
+      technicalSheets,
+      sizeChart,
       dolibarrProductId: product.dolibarrProductId ?? product.dolibarr_product_id ?? null,
       dolibarrRef: product.dolibarrRef ?? product.dolibarr_ref ?? ""
     };
@@ -96,7 +113,8 @@ function normalizeProduct(product, index) {
   const category = assignedCategories[0];
   const categoryName = categories.find(item => item.slug === category)?.shortName || "Protección industrial";
   const standards = list(product.certificaciones);
-  const sheet = String(product.ficha_tecnica || "").trim();
+  const technicalSheets = productDocuments(product);
+  const sizeChart = documentUrls(product.tabla_tallas_url)[0] || "";
   const suppliedSummary = String(product.descripcion || "").trim();
 
   return {
@@ -108,20 +126,22 @@ function normalizeProduct(product, index) {
     category,
     categories: assignedCategories,
     categoryName,
-    summary: suppliedSummary || `${name} ${brand ? `de ${brand}` : ""} para aplicaciones de protección industrial. Disponibilidad y precio sujetos a confirmación.`,
-    description: suppliedSummary || `Solicite la validación técnica de ${name} según la tarea, el riesgo, las cantidades y las condiciones de uso de su empresa. Maxguantes confirma la referencia, documentación, precio y disponibilidad antes de cada pedido.`,
+    summary: suppliedSummary,
+    description: suppliedSummary,
     image: String(product.imagen || "/assets/product-placeholder.svg").trim(),
-    technicalSheet: /^(https?:\/\/|\/)/i.test(sheet) ? sheet : "",
+    technicalSheet: technicalSheets[0] || "",
+    technicalSheets,
+    sizeChart,
     featured: product.destacado === true,
     sortOrder: Number.isFinite(Number(product.orden)) ? Number(product.orden) : 9999,
     published: product.publicado !== false,
     specialOrder: product.pedido_especial === true,
-    standards: standards.length ? standards : ["Certificaciones según ficha técnica vigente"],
-    features: list(product.caracteristicas).length ? list(product.caracteristicas) : ["Selección sujeta a validación técnica", "Cotización personalizada", "Disponibilidad confirmada manualmente"],
-    materials: list(product.materiales).length ? list(product.materiales) : ["Consulte la ficha técnica del fabricante"],
+    standards,
+    features: list(product.caracteristicas),
+    materials: list(product.materiales),
     variants: Array.isArray(product.structuredVariants) && product.structuredVariants.length
       ? product.structuredVariants.map(variant => variant.label || Object.values(variant.attributes || {}).filter(Boolean).join(" · ") || variant.public_code)
-      : list(product.variantes).length ? list(product.variantes) : ["Presentaciones, tallas o colores según referencia"],
+      : list(product.variantes),
     structuredVariants: Array.isArray(product.structuredVariants) ? product.structuredVariants : [],
     dolibarrProductId: product.dolibarr_product_id ?? null,
     dolibarrRef: String(product.dolibarr_ref || "").trim(),
@@ -135,7 +155,9 @@ async function loadProducts() {
   const baseUrl = process.env.SUPABASE_URL?.replace(/\/$/, "");
   const apiKey = process.env.SUPABASE_PUBLISHABLE_KEY;
   const view = process.env.SUPABASE_PRODUCTS_VIEW || "catalogo";
-  if (!baseUrl || !apiKey) return local.filter(product => product.published !== false);
+  if (!baseUrl || !apiKey) {
+    throw new Error("Faltan SUPABASE_URL o SUPABASE_PUBLISHABLE_KEY; no se puede generar el catálogo de producción.");
+  }
 
   try {
     const headers = { apikey: apiKey, Authorization: `Bearer ${apiKey}` };
@@ -163,8 +185,7 @@ async function loadProducts() {
     }
     return normalized;
   } catch (error) {
-    console.warn(`Aviso: ${error.message}. Se utilizará el catálogo local.`);
-    return local.filter(product => product.published !== false);
+    throw new Error(`No se pudo cargar el catálogo desde Supabase: ${error.message}`);
   }
 }
 

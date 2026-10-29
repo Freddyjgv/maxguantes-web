@@ -300,15 +300,169 @@ export function renderProducts(products) {
   return layout({title:"Catálogo de EPP certificado | Maxguantes Panamá",description:"Catálogo de equipos de protección personal para empresas: ropa ignífuga, guantes, respiradores, protección visual, altura y calzado.",path:"/productos/",active:"products",content,schemas:[schema,breadcrumbSchema([{name:"Inicio",path:"/"},{name:"Productos",path:"/productos/"}])],keywords:"catálogo EPP Panamá, equipos de seguridad industrial, cotizar EPP"});
 }
 
+function productDocumentLinks(product) {
+  const sheets = Array.isArray(product.technicalSheets) && product.technicalSheets.length
+    ? product.technicalSheets
+    : product.technicalSheet ? [product.technicalSheet] : [];
+  const uniqueSheets = [...new Set(sheets.filter(Boolean))];
+  const sheetLinks = uniqueSheets.map((url, index) => {
+    const label = uniqueSheets.length === 1 ? "Abrir ficha técnica" : `Ficha técnica ${index + 1}`;
+    return `<a class="btn btn-outline" href="${esc(url)}" target="_blank" rel="noopener">${label}</a>`;
+  });
+  const links = sheetLinks.filter(Boolean);
+  return links.length
+    ? `<div class="document-links">${links.join("")}</div>`
+    : `<button class="text-link button-link" type="button" data-open-quote>Solicitar ficha técnica</button>`;
+}
+
 export function renderProduct(product, products) {
   const related = products.filter(p => p.slug !== product.slug && (p.categories || [p.category]).some(category => (product.categories || [product.category]).includes(category))).slice(0,3);
   const variantSelector = product.structuredVariants?.length
     ? `<label class="product-variant-picker"><span>Seleccione talla, color o presentación *</span><select data-product-variant required>${variantOptions(product)}</select><small>La variante es obligatoria. Para solicitar dos tallas, agregue cada una por separado.</small></label>`
     : "";
+  const topDocuments = product.technicalSheets?.length || product.technicalSheet
+    ? productDocumentLinks(product)
+    : "";
+  const descriptionSection = product.description?.trim()
+    ? `<h2>Descripción</h2><p>${esc(product.description)}</p>`
+    : "";
+  const featuresSection = product.features?.length
+    ? `<h2>Características</h2><ul class="check-list">${product.features.map(f=>`<li>${esc(f)}</li>`).join("")}</ul>`
+    : "";
+  const materialsSection = product.materials?.length
+    ? `<h2>Materiales</h2><p>${esc(product.materials.join(", "))}</p>`
+    : "";
+  const variantsSection = product.variants?.length
+    ? `<h2>Variantes</h2><ul>${product.variants.map(v=>`<li>${esc(v)}</li>`).join("")}</ul>`
+    : "";
+  const standardsSection = product.standards?.length
+    ? `<h2>Normas y referencias</h2><ul>${product.standards.map(s=>`<li>${esc(s)}</li>`).join("")}</ul><p>Las normas y el desempeño deben verificarse contra la ficha vigente del fabricante antes de aprobar una aplicación.</p>`
+    : "";
   const productSchema = {"@context":"https://schema.org","@type":"Product",name:product.name,sku:product.sku,brand:{"@type":"Brand",name:product.brand},category:product.categoryName,description:product.summary,image:absoluteUrl(product.image),url:`${site.domain}/productos/${product.slug}/`};
-  const content = `<section class="product-detail"><div class="container"><div class="product-detail-nav"><nav class="breadcrumb dark" aria-label="Migas de pan"><a href="/">Inicio</a><span>/</span><a href="/productos/">Productos</a><span>/</span><a href="/categorias/${product.category}/">${esc(product.categoryName)}</a><span>/</span><span aria-current="page">${esc(product.sku)}</span></nav><a class="close-product-detail" href="/productos/" aria-label="Cerrar ficha y volver al catálogo"><span aria-hidden="true">×</span> Cerrar ficha</a></div><div class="product-detail-grid"><div class="product-gallery">${product.specialOrder ? '<span class="product-status">Pedido especial</span>' : ""}<img src="${esc(product.image)}" width="900" height="900" fetchpriority="high" alt="${esc(product.name)}"></div><div class="product-summary">${eyebrow(`${esc(product.brand)} · ${esc(product.sku)}`, true)}<h1>${esc(product.name)}</h1><p class="product-lead">${esc(product.summary)}</p><div class="notice"><strong>Cotización personalizada</strong><span>No mostramos precio ni inventario. Confirmamos ambos según el cliente, cantidad y fecha requerida.</span></div>${variantSelector}<div class="detail-add-row"><label class="quantity-picker quantity-picker-large"><span class="sr-only">Cantidad de ${esc(product.name)}</span><button type="button" data-quantity-minus aria-label="Reducir cantidad">−</button><input type="number" min="1" max="9999" value="1" inputmode="numeric" data-product-quantity aria-label="Cantidad de ${esc(product.name)}"><button type="button" data-quantity-plus aria-label="Aumentar cantidad">+</button></label><button class="btn btn-primary btn-large add-quote" type="button" data-code="${esc(product.sku)}" data-name="${esc(product.shortName || product.name)}" data-image="${esc(product.image)}" data-dolibarr-product-id="${esc(product.dolibarrProductId ?? "")}" data-dolibarr-ref="${esc(product.dolibarrRef || "")}">Agregar a solicitud</button></div><a class="btn btn-outline" href="${whatsappUrl(`Hola Maxguantes, deseo cotizar el producto ${product.sku} - ${product.name}.`)}" target="_blank" rel="noopener">Consultar por WhatsApp</a></div></div></div></section>
-    <section class="section"><div class="container detail-columns"><div class="prose"><h2>Descripción</h2><p>${esc(product.description)}</p><h2>Características</h2><ul class="check-list">${product.features.map(f=>`<li>${esc(f)}</li>`).join("")}</ul><h2>Materiales y variantes</h2><p>${esc(product.materials.join(", "))}.</p><ul>${product.variants.map(v=>`<li>${esc(v)}</li>`).join("")}</ul></div><aside class="spec-card"><span class="eyebrow">Documentación técnica</span><h2>Normas y referencias</h2><ul>${product.standards.map(s=>`<li>${esc(s)}</li>`).join("")}</ul><p>Las normas y el desempeño deben verificarse contra la ficha vigente del fabricante antes de aprobar una aplicación.</p>${product.technicalSheet ? `<a class="btn btn-outline" href="${esc(product.technicalSheet)}" target="_blank" rel="noopener">Abrir ficha técnica</a>` : `<button class="text-link button-link" type="button" data-open-quote>Solicitar ficha técnica</button>`}</aside></div></section>
-    ${related.length ? `<section class="section related"><div class="container"><div class="section-head"><div>${eyebrow("Misma categoría")}<h2 class="section-title">Productos relacionados.</h2></div><a class="text-link" href="/categorias/${product.category}/">Ver categoría</a></div><div class="product-grid">${related.map(productCard).join("")}</div></div></section>` : ""}`;
+  const extraDetails = [
+    descriptionSection,
+    featuresSection,
+    materialsSection,
+    variantsSection
+  ].filter(Boolean).join("");
+
+  const content = `
+    <section class="product-detail">
+      <div class="container">
+
+        <div class="product-detail-nav">
+          <nav class="breadcrumb dark" aria-label="Migas de pan">
+            <a href="/">Inicio</a>
+            <span>/</span>
+            <a href="/productos/">Productos</a>
+            <span>/</span>
+            <span aria-current="page">${esc(product.sku)}</span>
+          </nav>
+          <a class="close-product-detail" href="/productos/">
+            <span aria-hidden="true">×</span> Cerrar ficha
+          </a>
+        </div>
+
+        <div class="product-detail-grid">
+
+          <div class="product-gallery">
+            ${product.specialOrder ? '<span class="product-status">Pedido especial</span>' : ""}
+            <img
+              src="${esc(product.image)}"
+              alt="${esc(product.name)}"
+              width="600"
+              height="600"
+              fetchpriority="high"
+            >
+          </div>
+
+          <div class="product-summary">
+
+            <div class="product-identity">
+              <span>${esc(product.brand)}</span>
+              <span>SKU: ${esc(product.sku)}</span>
+            </div>
+
+            <h1>${esc(product.name)}</h1>
+
+            ${product.summary
+              ? `<p class="product-lead">${esc(product.summary)}</p>`
+              : ""}
+
+            ${product.standards?.length
+              ? `<div class="product-certifications">
+                   <h2>Normas y certificaciones</h2>
+                   <ul>${product.standards.map(s =>
+                     `<li>${esc(s)}</li>`
+                   ).join("")}</ul>
+                 </div>`
+              : ""}
+
+            ${variantSelector}
+
+            <div class="product-actions">
+
+              <div class="detail-add-row">
+                <label class="quantity-picker quantity-picker-large">
+                  <span class="sr-only">Cantidad de ${esc(product.name)}</span>
+                  <button type="button" data-quantity-minus aria-label="Reducir cantidad">−</button>
+                  <input type="number" min="1" max="9999" value="1"
+                    inputmode="numeric" data-product-quantity
+                    aria-label="Cantidad de ${esc(product.name)}">
+                  <button type="button" data-quantity-plus aria-label="Aumentar cantidad">+</button>
+                </label>
+
+                <button class="btn btn-primary add-quote" type="button"
+                  data-code="${esc(product.sku)}"
+                  data-name="${esc(product.shortName || product.name)}"
+                  data-image="${esc(product.image)}"
+                  data-dolibarr-product-id="${esc(product.dolibarrProductId ?? "")}"
+                  data-dolibarr-ref="${esc(product.dolibarrRef || "")}">
+                  Agregar a solicitud
+                </button>
+              </div>
+
+              <div class="product-secondary-actions">
+                ${topDocuments}
+
+                <a class="btn product-whatsapp"
+                   href="${whatsappUrl(`Hola Maxguantes, deseo cotizar el producto ${product.sku} - ${product.name}.`)}"
+                   target="_blank" rel="noopener">
+                   Consultar por WhatsApp
+                </a>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    ${extraDetails
+      ? `<section class="section product-extra-details">
+           <div class="container">
+             <div class="prose">${extraDetails}</div>
+           </div>
+         </section>`
+      : ""}
+
+    ${related.length
+      ? `<section class="section related">
+           <div class="container">
+             <div class="section-head">
+               <div>
+                 ${eyebrow("Misma categoría")}
+                 <h2 class="section-title">Productos relacionados.</h2>
+               </div>
+               <a class="text-link" href="/categorias/${product.category}/">Ver categoría</a>
+             </div>
+             <div class="product-grid">${related.map(productCard).join("")}</div>
+           </div>
+         </section>`
+      : ""}
+  `;
   return layout({title:product.seoTitle || `${product.name} | Maxguantes`,description:product.seoDescription || product.summary,path:`/productos/${product.slug}/`,active:"products",content,schemas:[productSchema,breadcrumbSchema([{name:"Inicio",path:"/"},{name:"Productos",path:"/productos/"},{name:product.categoryName,path:`/categorias/${product.category}/`},{name:product.sku,path:`/productos/${product.slug}/`}])],bodyClass:"product-page"});
 }
 
